@@ -6,6 +6,18 @@
     <title>Budget Tracker</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --income-color: #27ae60;
+            --expense-color: #e74c3c;
+            --warning-color: #f39c12;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,32 +29,62 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 15px;
+            border-radius: var(--border-radius);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
+            background: linear-gradient(135deg, var(--dark-color), #34495e);
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 300;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .language-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-btn:hover, .language-btn.active {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .summary-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             padding: 30px;
             background: #f8f9fa;
@@ -51,22 +93,39 @@
         .card {
             background: white;
             padding: 25px;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--box-shadow);
             border-left: 4px solid;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: inherit;
         }
 
         .income-card {
-            border-left-color: #27ae60;
+            border-left-color: var(--income-color);
         }
 
         .expense-card {
-            border-left-color: #e74c3c;
+            border-left-color: var(--expense-color);
         }
 
         .balance-card {
-            border-left-color: #3498db;
+            border-left-color: var(--primary-color);
         }
 
         .card h3 {
@@ -80,93 +139,204 @@
         .card p {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--dark-color);
         }
 
         .charts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 30px;
             padding: 30px;
             background: #f8f9fa;
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid var(--light-color);
         }
 
         .chart-card {
             background: white;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
         }
 
         .chart-card h3 {
             text-align: center;
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: var(--dark-color);
             font-size: 1.2rem;
+        }
+
+        .chart-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chart-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .chart-toggle:hover {
+            background: #2980b9;
         }
 
         .chart-card canvas {
             max-height: 300px;
         }
 
+        .controls-panel {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid var(--light-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--light-color);
+            border-radius: 5px;
+            background: white;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--expense-color);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
         .transaction-form {
             padding: 30px;
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid var(--light-color);
         }
 
         .transaction-form h3 {
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: var(--dark-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-color);
         }
 
         input, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
+            border: 2px solid var(--light-color);
+            border-radius: var(--border-radius);
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            transition: var(--transition);
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
-        button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+        .input-error {
+            border-color: var(--expense-color);
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #2980b9, #3498db);
+        .error-message {
+            color: var(--expense-color);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .transactions-section {
             padding: 30px;
         }
 
-        .transactions-section h3 {
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            color: #2c3e50;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-header h3 {
+            color: var(--dark-color);
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 1px solid var(--light-color);
+            border-radius: 5px;
+            width: 250px;
         }
 
         .transactions-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
@@ -177,21 +347,34 @@
             padding: 15px;
             background: #f8f9fa;
             margin-bottom: 10px;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             border-left: 4px solid;
-            transition: transform 0.2s ease;
+            transition: var(--transition);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .transaction-item:hover {
             transform: translateX(5px);
+            background: #e8f4fc;
         }
 
         .transaction-item.income {
-            border-left-color: #27ae60;
+            border-left-color: var(--income-color);
         }
 
         .transaction-item.expense {
-            border-left-color: #e74c3c;
+            border-left-color: var(--expense-color);
         }
 
         .transaction-info {
@@ -200,7 +383,7 @@
 
         .transaction-description {
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--dark-color);
             margin-bottom: 5px;
         }
 
@@ -209,6 +392,10 @@
             color: #7f8c8d;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            background: var(--light-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
         }
 
         .transaction-amount {
@@ -218,26 +405,48 @@
         }
 
         .transaction-amount.income {
-            color: #27ae60;
+            color: var(--income-color);
         }
 
         .transaction-amount.expense {
-            color: #e74c3c;
+            color: var(--expense-color);
+        }
+
+        .transaction-date {
+            font-size: 0.8rem;
+            color: #95a5a6;
+            margin-top: 2px;
+        }
+
+        .transaction-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .edit-btn {
+            color: var(--primary-color);
+        }
+
+        .edit-btn:hover {
+            background: rgba(52, 152, 219, 0.1);
         }
 
         .delete-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background 0.3s ease;
+            color: var(--expense-color);
         }
 
         .delete-btn:hover {
-            background: #c0392b;
+            background: rgba(231, 76, 60, 0.1);
         }
 
         .empty-state {
@@ -245,6 +454,44 @@
             color: #7f8c8d;
             padding: 40px;
             font-style: italic;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: var(--income-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: var(--expense-color);
+        }
+
+        .notification.warning {
+            background: var(--warning-color);
+        }
+
+        /* Category optgroup styling */
+        optgroup {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        optgroup option {
+            font-weight: normal;
+            color: #34495e;
+            padding-left: 10px;
         }
 
         /* Scrollbar styling */
@@ -272,6 +519,16 @@
                 border-radius: 10px;
             }
             
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-content {
+                flex-direction: column;
+            }
+            
             .summary-cards {
                 grid-template-columns: 1fr;
                 padding: 20px;
@@ -287,8 +544,32 @@
                 padding: 15px;
             }
             
+            .chart-actions {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            .controls-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
             header h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .transaction-item {
@@ -299,103 +580,599 @@
             .transaction-amount {
                 margin: 10px 0;
             }
+            
+            .transaction-actions {
+                align-self: flex-end;
+            }
+        }
+
+        .budget-progress {
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--income-color);
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.warning {
+            background: var(--warning-color);
+        }
+
+        .progress-fill.danger {
+            background: var(--expense-color);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>💰 Budget Tracker</h1>
+            <div class="header-content">
+                <h1 data-i18n="appTitle">💰 Budget Tracker</h1>
+                <div class="language-selector">
+                    <button class="language-btn active" data-lang="en">English</button>
+                    <button class="language-btn" data-lang="es">Español</button>
+                    <button class="language-btn" data-lang="fr">Français</button>
+                    <button class="language-btn" data-lang="de">Deutsch</button>
+                    <button class="language-btn" data-lang="pt">Português</button>
+                </div>
+            </div>
         </header>
 
         <div class="summary-cards">
             <div class="card income-card">
-                <h3>Total Income</h3>
+                <h3 data-i18n="totalIncome">Total Income</h3>
                 <p id="total-income">$0.00</p>
             </div>
             <div class="card expense-card">
-                <h3>Total Expenses</h3>
+                <h3 data-i18n="totalExpenses">Total Expenses</h3>
                 <p id="total-expenses">$0.00</p>
             </div>
             <div class="card balance-card">
-                <h3>Balance</h3>
+                <h3 data-i18n="balance">Balance</h3>
                 <p id="balance">$0.00</p>
+                <div class="budget-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="balance-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="date-filter">
+                <select class="filter-select" id="time-range">
+                    <option value="all" data-i18n="allTime">All Time</option>
+                    <option value="month" data-i18n="thisMonth">This Month</option>
+                    <option value="year" data-i18n="thisYear">This Year</option>
+                </select>
+                <select class="filter-select" id="category-filter">
+                    <option value="all" data-i18n="allCategories">All Categories</option>
+                </select>
+            </div>
+            <div class="export-buttons">
+                <button class="btn btn-primary" id="export-csv" data-i18n="exportCSV">Export CSV</button>
+                <button class="btn btn-secondary" id="export-json" data-i18n="exportJSON">Export JSON</button>
+                <button class="btn btn-danger" id="clear-data" data-i18n="clearData">Clear Data</button>
             </div>
         </div>
 
         <div class="charts-container">
             <div class="chart-card">
-                <h3>Expenses by Category</h3>
+                <h3 data-i18n="expensesByCategory">Expenses by Category</h3>
+                <div class="chart-actions">
+                    <button class="chart-toggle" id="toggle-chart" data-i18n="switchToDoughnut">Switch to Doughnut</button>
+                </div>
                 <canvas id="pie-chart"></canvas>
             </div>
             <div class="chart-card">
-                <h3>Monthly Overview</h3>
+                <h3 data-i18n="monthlyOverview">Monthly Overview</h3>
                 <canvas id="bar-chart"></canvas>
             </div>
         </div>
 
         <form id="transaction-form" class="transaction-form">
-            <h3>Add Transaction</h3>
-            <div class="form-group">
-                <input type="text" id="description" placeholder="Description" required>
+            <h3 data-i18n="addTransaction">Add Transaction</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="description" data-i18n="description">Description</label>
+                    <input type="text" id="description" data-i18n-placeholder="enterDescription" required>
+                    <div class="error-message" id="description-error" data-i18n="descriptionRequired">Description is required</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="amount" data-i18n="amount">Amount</label>
+                    <input type="number" id="amount" step="0.01" min="0.01" data-i18n-placeholder="enterAmount" required>
+                    <div class="error-message" id="amount-error" data-i18n="amountRequired">Please enter a valid amount</div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="type" data-i18n="type">Type</label>
+                    <select id="type" required>
+                        <option value="" data-i18n="selectType">Select Type</option>
+                        <option value="income" data-i18n="income">Income</option>
+                        <option value="expense" data-i18n="expense">Expense</option>
+                    </select>
+                    <div class="error-message" id="type-error" data-i18n="typeRequired">Please select a type</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="category" data-i18n="category">Category</label>
+                    <select id="category" required>
+                        <option value="" data-i18n="selectCategory">Select Category</option>
+                        
+                        <!-- Income Categories -->
+                        <optgroup label="💰 Income" data-i18n="incomeCategories">
+                            <option value="salary" data-i18n="salary">Salary/Wages</option>
+                            <option value="freelance" data-i18n="freelance">Freelance Work</option>
+                            <option value="bonus" data-i18n="bonus">Bonus & Commissions</option>
+                            <option value="investment" data-i18n="investment">Investment Income</option>
+                            <option value="rental" data-i18n="rental">Rental Income</option>
+                            <option value="gift" data-i18n="gift">Gifts & Inheritance</option>
+                            <option value="refund" data-i18n="refund">Refunds & Rebates</option>
+                            <option value="side-business" data-i18n="sideBusiness">Side Business</option>
+                        </optgroup>
+                        
+                        <!-- Essential Expenses -->
+                        <optgroup label="🏠 Essential Expenses" data-i18n="essentialExpenses">
+                            <option value="rent" data-i18n="rent">Rent/Mortgage</option>
+                            <option value="utilities" data-i18n="utilities">Utilities</option>
+                            <option value="internet" data-i18n="internet">Internet & Phone</option>
+                            <option value="groceries" data-i18n="groceries">Groceries</option>
+                            <option value="transportation" data-i18n="transportation">Transportation</option>
+                            <option value="insurance" data-i18n="insurance">Insurance</option>
+                            <option value="medical" data-i18n="medical">Medical & Healthcare</option>
+                            <option value="debt" data-i18n="debt">Debt Payments</option>
+                        </optgroup>
+                        
+                        <!-- Lifestyle & Entertainment -->
+                        <optgroup label="🎯 Lifestyle & Entertainment" data-i18n="lifestyleEntertainment">
+                            <option value="dining" data-i18n="dining">Dining Out</option>
+                            <option value="entertainment" data-i18n="entertainment">Entertainment</option>
+                            <option value="shopping" data-i18n="shopping">Shopping</option>
+                            <option value="subscriptions" data-i18n="subscriptions">Subscriptions</option>
+                            <option value="hobbies" data-i18n="hobbies">Hobbies & Leisure</option>
+                            <option value="fitness" data-i18n="fitness">Fitness & Sports</option>
+                        </optgroup>
+                    </select>
+                    <div class="error-message" id="category-error" data-i18n="categoryRequired">Please select a category</div>
+                </div>
             </div>
-            <div class="form-group">
-                <select id="type" required>
-                    <option value="">Select Type</option>
-                    <option value="income">Income</option>
-                    <option value="expense">Expense</option>
-                </select>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-i18n="addTransaction">Add Transaction</button>
+                <button type="button" class="btn btn-secondary" id="cancel-edit" style="display: none;" data-i18n="cancel">Cancel</button>
             </div>
-            <div class="form-group">
-                <select id="category" required>
-                    <option value="">Select Category</option>
-                    <option value="salary">Salary</option>
-                    <option value="food">Food</option>
-                    <option value="rent">Rent</option>
-                    <option value="transport">Transport</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="utilities">Utilities</option>
-                    <option value="shopping">Shopping</option>
-                    <option value="healthcare">Healthcare</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <button type="submit">Add Transaction</button>
         </form>
 
         <div class="transactions-section">
-            <h3>Transaction History</h3>
+            <div class="section-header">
+                <h3 data-i18n="transactionHistory">Transaction History</h3>
+                <input type="text" class="search-box" id="search-transactions" data-i18n-placeholder="searchTransactions">
+            </div>
             <div id="transactions-list" class="transactions-list">
                 <!-- Transactions will be dynamically inserted here -->
             </div>
         </div>
     </div>
 
+    <div class="notification" id="notification"></div>
+
     <script>
+        // Language translations
+        const translations = {
+            en: {
+                appTitle: "💰 Budget Tracker",
+                totalIncome: "Total Income",
+                totalExpenses: "Total Expenses",
+                balance: "Balance",
+                allTime: "All Time",
+                thisMonth: "This Month",
+                thisYear: "This Year",
+                allCategories: "All Categories",
+                exportCSV: "Export CSV",
+                exportJSON: "Export JSON",
+                clearData: "Clear Data",
+                expensesByCategory: "Expenses by Category",
+                monthlyOverview: "Monthly Overview",
+                switchToDoughnut: "Switch to Doughnut",
+                switchToPie: "Switch to Pie",
+                addTransaction: "Add Transaction",
+                description: "Description",
+                enterDescription: "Enter description",
+                descriptionRequired: "Description is required",
+                amount: "Amount",
+                enterAmount: "Enter amount",
+                amountRequired: "Please enter a valid amount",
+                type: "Type",
+                selectType: "Select Type",
+                income: "Income",
+                expense: "Expense",
+                typeRequired: "Please select a type",
+                category: "Category",
+                selectCategory: "Select Category",
+                categoryRequired: "Please select a category",
+                incomeCategories: "Income",
+                salary: "Salary/Wages",
+                freelance: "Freelance Work",
+                bonus: "Bonus & Commissions",
+                investment: "Investment Income",
+                rental: "Rental Income",
+                gift: "Gifts & Inheritance",
+                refund: "Refunds & Rebates",
+                sideBusiness: "Side Business",
+                essentialExpenses: "Essential Expenses",
+                rent: "Rent/Mortgage",
+                utilities: "Utilities",
+                internet: "Internet & Phone",
+                groceries: "Groceries",
+                transportation: "Transportation",
+                insurance: "Insurance",
+                medical: "Medical & Healthcare",
+                debt: "Debt Payments",
+                lifestyleEntertainment: "Lifestyle & Entertainment",
+                dining: "Dining Out",
+                entertainment: "Entertainment",
+                shopping: "Shopping",
+                subscriptions: "Subscriptions",
+                hobbies: "Hobbies & Leisure",
+                fitness: "Fitness & Sports",
+                cancel: "Cancel",
+                transactionHistory: "Transaction History",
+                searchTransactions: "Search transactions...",
+                edit: "Edit",
+                delete: "Delete",
+                noTransactions: "No transactions yet. Add your first transaction above!",
+                transactionAdded: "Transaction added successfully!",
+                transactionDeleted: "Transaction deleted successfully",
+                transactionUpdated: "Transaction updated successfully",
+                confirmDelete: "Are you sure you want to delete this transaction?",
+                confirmClear: "Are you sure you want to clear all data? This cannot be undone.",
+                dataExported: "Data exported successfully",
+                dataCleared: "All data has been cleared"
+            },
+            es: {
+                appTitle: "💰 Seguimiento de Presupuesto",
+                totalIncome: "Ingresos Totales",
+                totalExpenses: "Gastos Totales",
+                balance: "Balance",
+                allTime: "Todo el Tiempo",
+                thisMonth: "Este Mes",
+                thisYear: "Este Año",
+                allCategories: "Todas las Categorías",
+                exportCSV: "Exportar CSV",
+                exportJSON: "Exportar JSON",
+                clearData: "Borrar Datos",
+                expensesByCategory: "Gastos por Categoría",
+                monthlyOverview: "Resumen Mensual",
+                switchToDoughnut: "Cambiar a Dona",
+                switchToPie: "Cambiar a Pastel",
+                addTransaction: "Agregar Transacción",
+                description: "Descripción",
+                enterDescription: "Ingrese descripción",
+                descriptionRequired: "La descripción es requerida",
+                amount: "Monto",
+                enterAmount: "Ingrese monto",
+                amountRequired: "Por favor ingrese un monto válido",
+                type: "Tipo",
+                selectType: "Seleccionar Tipo",
+                income: "Ingreso",
+                expense: "Gasto",
+                typeRequired: "Por favor seleccione un tipo",
+                category: "Categoría",
+                selectCategory: "Seleccionar Categoría",
+                categoryRequired: "Por favor seleccione una categoría",
+                incomeCategories: "Ingresos",
+                salary: "Salario/Sueldo",
+                freelance: "Trabajo Independiente",
+                bonus: "Bonus & Comisiones",
+                investment: "Ingresos por Inversión",
+                rental: "Ingresos por Alquiler",
+                gift: "Regalos & Herencia",
+                refund: "Reembolsos",
+                sideBusiness: "Negocio Secundario",
+                essentialExpenses: "Gastos Esenciales",
+                rent: "Alquiler/Hipoteca",
+                utilities: "Servicios",
+                internet: "Internet & Teléfono",
+                groceries: "Comestibles",
+                transportation: "Transporte",
+                insurance: "Seguro",
+                medical: "Medicina & Salud",
+                debt: "Pagos de Deuda",
+                lifestyleEntertainment: "Estilo de Vida & Entretenimiento",
+                dining: "Comer Fuera",
+                entertainment: "Entretenimiento",
+                shopping: "Compras",
+                subscriptions: "Suscripciones",
+                hobbies: "Pasatiempos & Ocio",
+                fitness: "Fitness & Deportes",
+                cancel: "Cancelar",
+                transactionHistory: "Historial de Transacciones",
+                searchTransactions: "Buscar transacciones...",
+                edit: "Editar",
+                delete: "Eliminar",
+                noTransactions: "No hay transacciones aún. ¡Agrega tu primera transacción arriba!",
+                transactionAdded: "¡Transacción agregada exitosamente!",
+                transactionDeleted: "Transacción eliminada exitosamente",
+                transactionUpdated: "Transacción actualizada exitosamente",
+                confirmDelete: "¿Estás seguro de que quieres eliminar esta transacción?",
+                confirmClear: "¿Estás seguro de que quieres borrar todos los datos? Esto no se puede deshacer.",
+                dataExported: "Datos exportados exitosamente",
+                dataCleared: "Todos los datos han sido borrados"
+            },
+            fr: {
+                appTitle: "💰 Suivi de Budget",
+                totalIncome: "Revenu Total",
+                totalExpenses: "Dépenses Totales",
+                balance: "Solde",
+                allTime: "Tout le Temps",
+                thisMonth: "Ce Mois",
+                thisYear: "Cette Année",
+                allCategories: "Toutes les Catégories",
+                exportCSV: "Exporter CSV",
+                exportJSON: "Exporter JSON",
+                clearData: "Effacer les Données",
+                expensesByCategory: "Dépenses par Catégorie",
+                monthlyOverview: "Aperçu Mensuel",
+                switchToDoughnut: "Passer au Donut",
+                switchToPie: "Passer au Camembert",
+                addTransaction: "Ajouter une Transaction",
+                description: "Description",
+                enterDescription: "Entrez la description",
+                descriptionRequired: "La description est requise",
+                amount: "Montant",
+                enterAmount: "Entrez le montant",
+                amountRequired: "Veuillez entrer un montant valide",
+                type: "Type",
+                selectType: "Sélectionner le Type",
+                income: "Revenu",
+                expense: "Dépense",
+                typeRequired: "Veuillez sélectionner un type",
+                category: "Catégorie",
+                selectCategory: "Sélectionner la Catégorie",
+                categoryRequired: "Veuillez sélectionner une catégorie",
+                incomeCategories: "Revenus",
+                salary: "Salaire/Traitement",
+                freelance: "Travail Indépendant",
+                bonus: "Bonus & Commissions",
+                investment: "Revenus de Placement",
+                rental: "Revenus Locatifs",
+                gift: "Cadeaux & Héritage",
+                refund: "Remboursements",
+                sideBusiness: "Entreprise Secondaire",
+                essentialExpenses: "Dépenses Essentielles",
+                rent: "Loyer/Hypothèque",
+                utilities: "Services Publics",
+                internet: "Internet & Téléphone",
+                groceries: "Épicerie",
+                transportation: "Transport",
+                insurance: "Assurance",
+                medical: "Médical & Santé",
+                debt: "Paiements de Dette",
+                lifestyleEntertainment: "Style de Vie & Divertissement",
+                dining: "Restaurant",
+                entertainment: "Divertissement",
+                shopping: "Shopping",
+                subscriptions: "Abonnements",
+                hobbies: "Loisirs & Divertissement",
+                fitness: "Fitness & Sports",
+                cancel: "Annuler",
+                transactionHistory: "Historique des Transactions",
+                searchTransactions: "Rechercher des transactions...",
+                edit: "Modifier",
+                delete: "Supprimer",
+                noTransactions: "Aucune transaction pour le moment. Ajoutez votre première transaction ci-dessus!",
+                transactionAdded: "Transaction ajoutée avec succès!",
+                transactionDeleted: "Transaction supprimée avec succès",
+                transactionUpdated: "Transaction mise à jour avec succès",
+                confirmDelete: "Êtes-vous sûr de vouloir supprimer cette transaction?",
+                confirmClear: "Êtes-vous sûr de vouloir effacer toutes les données? Cette action ne peut pas être annulée.",
+                dataExported: "Données exportées avec succès",
+                dataCleared: "Toutes les données ont été effacées"
+            },
+            de: {
+                appTitle: "💰 Budget Tracker",
+                totalIncome: "Gesamteinnahmen",
+                totalExpenses: "Gesamtausgaben",
+                balance: "Saldo",
+                allTime: "Gesamter Zeitraum",
+                thisMonth: "Diesen Monat",
+                thisYear: "Dieses Jahr",
+                allCategories: "Alle Kategorien",
+                exportCSV: "CSV exportieren",
+                exportJSON: "JSON exportieren",
+                clearData: "Daten löschen",
+                expensesByCategory: "Ausgaben nach Kategorie",
+                monthlyOverview: "Monatliche Übersicht",
+                switchToDoughnut: "Zu Donut wechseln",
+                switchToPie: "Zu Kreis wechseln",
+                addTransaction: "Transaktion hinzufügen",
+                description: "Beschreibung",
+                enterDescription: "Beschreibung eingeben",
+                descriptionRequired: "Beschreibung ist erforderlich",
+                amount: "Betrag",
+                enterAmount: "Betrag eingeben",
+                amountRequired: "Bitte geben Sie einen gültigen Betrag ein",
+                type: "Typ",
+                selectType: "Typ auswählen",
+                income: "Einnahme",
+                expense: "Ausgabe",
+                typeRequired: "Bitte wählen Sie einen Typ aus",
+                category: "Kategorie",
+                selectCategory: "Kategorie auswählen",
+                categoryRequired: "Bitte wählen Sie eine Kategorie aus",
+                incomeCategories: "Einnahmen",
+                salary: "Gehalt/Lohn",
+                freelance: "Freiberufliche Arbeit",
+                bonus: "Bonus & Provisionen",
+                investment: "Investment-Einnahmen",
+                rental: "Mieteinnahmen",
+                gift: "Geschenke & Erbschaft",
+                refund: "Rückerstattungen",
+                sideBusiness: "Nebengeschäft",
+                essentialExpenses: "Essenzielle Ausgaben",
+                rent: "Miete/Hypothek",
+                utilities: "Versorgungsleistungen",
+                internet: "Internet & Telefon",
+                groceries: "Lebensmittel",
+                transportation: "Transport",
+                insurance: "Versicherung",
+                medical: "Medizin & Gesundheit",
+                debt: "Schuldenzahlungen",
+                lifestyleEntertainment: "Lifestyle & Unterhaltung",
+                dining: "Essen gehen",
+                entertainment: "Unterhaltung",
+                shopping: "Einkaufen",
+                subscriptions: "Abonnements",
+                hobbies: "Hobbys & Freizeit",
+                fitness: "Fitness & Sport",
+                cancel: "Abbrechen",
+                transactionHistory: "Transaktionsverlauf",
+                searchTransactions: "Transaktionen suchen...",
+                edit: "Bearbeiten",
+                delete: "Löschen",
+                noTransactions: "Noch keine Transaktionen. Fügen Sie Ihre erste Transaktion oben hinzu!",
+                transactionAdded: "Transaktion erfolgreich hinzugefügt!",
+                transactionDeleted: "Transaktion erfolgreich gelöscht",
+                transactionUpdated: "Transaktion erfolgreich aktualisiert",
+                confirmDelete: "Sind Sie sicher, dass Sie diese Transaktion löschen möchten?",
+                confirmClear: "Sind Sie sicher, dass Sie alle Daten löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+                dataExported: "Daten erfolgreich exportiert",
+                dataCleared: "Alle Daten wurden gelöscht"
+            },
+            pt: {
+                appTitle: "💰 Rastreador de Orçamento",
+                totalIncome: "Renda Total",
+                totalExpenses: "Despesas Totais",
+                balance: "Saldo",
+                allTime: "Todo o Período",
+                thisMonth: "Este Mês",
+                thisYear: "Este Ano",
+                allCategories: "Todas as Categorias",
+                exportCSV: "Exportar CSV",
+                exportJSON: "Exportar JSON",
+                clearData: "Limpar Dados",
+                expensesByCategory: "Despesas por Categoria",
+                monthlyOverview: "Visão Mensal",
+                switchToDoughnut: "Mudar para Rosca",
+                switchToPie: "Mudar para Pizza",
+                addTransaction: "Adicionar Transação",
+                description: "Descrição",
+                enterDescription: "Insira a descrição",
+                descriptionRequired: "A descrição é obrigatória",
+                amount: "Valor",
+                enterAmount: "Insira o valor",
+                amountRequired: "Por favor insira um valor válido",
+                type: "Tipo",
+                selectType: "Selecionar Tipo",
+                income: "Receita",
+                expense: "Despesa",
+                typeRequired: "Por favor selecione um tipo",
+                category: "Categoria",
+                selectCategory: "Selecionar Categoria",
+                categoryRequired: "Por favor selecione uma categoria",
+                incomeCategories: "Rendas",
+                salary: "Salário/Ordenado",
+                freelance: "Trabalho Freelance",
+                bonus: "Bônus & Comissões",
+                investment: "Renda de Investimento",
+                rental: "Renda de Aluguel",
+                gift: "Presentes & Herança",
+                refund: "Reembolsos",
+                sideBusiness: "Negócio Secundário",
+                essentialExpenses: "Despesas Essenciais",
+                rent: "Aluguel/Hipoteca",
+                utilities: "Utilidades",
+                internet: "Internet & Telefone",
+                groceries: "Mantimentos",
+                transportation: "Transporte",
+                insurance: "Seguro",
+                medical: "Médico & Saúde",
+                debt: "Pagamentos de Dívida",
+                lifestyleEntertainment: "Estilo de Vida & Entretenimento",
+                dining: "Refeições Fora",
+                entertainment: "Entretenimento",
+                shopping: "Compras",
+                subscriptions: "Assinaturas",
+                hobbies: "Hobbies & Lazer",
+                fitness: "Fitness & Esportes",
+                cancel: "Cancelar",
+                transactionHistory: "Histórico de Transações",
+                searchTransactions: "Pesquisar transações...",
+                edit: "Editar",
+                delete: "Excluir",
+                noTransactions: "Nenhuma transação ainda. Adicione sua primeira transação acima!",
+                transactionAdded: "Transação adicionada com sucesso!",
+                transactionDeleted: "Transação excluída com sucesso",
+                transactionUpdated: "Transação atualizada com sucesso",
+                confirmDelete: "Tem certeza de que deseja excluir esta transação?",
+                confirmClear: "Tem certeza de que deseja limpar todos os dados? Isso não pode ser desfeito.",
+                dataExported: "Dados exportados com sucesso",
+                dataCleared: "Todos os dados foram limpos"
+            }
+        };
+
         class BudgetTracker {
             constructor() {
                 this.transactions = JSON.parse(localStorage.getItem('budgetTransactions')) || [];
                 this.pieChart = null;
                 this.barChart = null;
+                this.chartType = 'pie';
+                this.currentLanguage = 'en';
+                this.editingId = null;
+                this.filters = {
+                    timeRange: 'all',
+                    category: 'all',
+                    search: ''
+                };
                 this.initializeElements();
                 this.attachEventListeners();
                 this.updateUI();
                 this.initializeCharts();
+                this.updateFilterOptions();
             }
 
             initializeElements() {
+                // Form elements
                 this.transactionForm = document.getElementById('transaction-form');
                 this.descriptionInput = document.getElementById('description');
                 this.amountInput = document.getElementById('amount');
                 this.typeInput = document.getElementById('type');
                 this.categoryInput = document.getElementById('category');
+                this.submitBtn = this.transactionForm.querySelector('button[type="submit"]');
+                this.cancelEditBtn = document.getElementById('cancel-edit');
+                
+                // Display elements
                 this.transactionsList = document.getElementById('transactions-list');
                 this.totalIncomeElement = document.getElementById('total-income');
                 this.totalExpensesElement = document.getElementById('total-expenses');
                 this.balanceElement = document.getElementById('balance');
+                this.balanceProgress = document.getElementById('balance-progress');
+                
+                // Filter elements
+                this.timeRangeFilter = document.getElementById('time-range');
+                this.categoryFilter = document.getElementById('category-filter');
+                this.searchInput = document.getElementById('search-transactions');
+                
+                // Action elements
+                this.toggleChartBtn = document.getElementById('toggle-chart');
+                this.exportCsvBtn = document.getElementById('export-csv');
+                this.exportJsonBtn = document.getElementById('export-json');
+                this.clearDataBtn = document.getElementById('clear-data');
+                
+                // Language elements
+                this.languageBtns = document.querySelectorAll('.language-btn');
+                
+                // Notification element
+                this.notification = document.getElementById('notification');
             }
 
             attachEventListeners() {
@@ -403,48 +1180,259 @@
                     e.preventDefault();
                     this.addTransaction();
                 });
+
+                // Filter events
+                this.timeRangeFilter.addEventListener('change', (e) => {
+                    this.filters.timeRange = e.target.value;
+                    this.updateUI();
+                });
+
+                this.categoryFilter.addEventListener('change', (e) => {
+                    this.filters.category = e.target.value;
+                    this.updateUI();
+                });
+
+                this.searchInput.addEventListener('input', (e) => {
+                    this.filters.search = e.target.value.toLowerCase();
+                    this.updateUI();
+                });
+
+                // Action events
+                this.toggleChartBtn.addEventListener('click', () => this.toggleChartType());
+                this.exportCsvBtn.addEventListener('click', () => this.exportToCSV());
+                this.exportJsonBtn.addEventListener('click', () => this.exportToJSON());
+                this.clearDataBtn.addEventListener('click', () => this.clearAllData());
+                this.cancelEditBtn.addEventListener('click', () => this.cancelEdit());
+
+                // Language events
+                this.languageBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const lang = e.target.dataset.lang;
+                        this.changeLanguage(lang);
+                    });
+                });
+            }
+
+            changeLanguage(lang) {
+                this.currentLanguage = lang;
+                
+                // Update active language button
+                this.languageBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+                
+                // Update all text elements
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+                
+                // Update placeholders
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.placeholder = translations[lang][key];
+                    }
+                });
+                
+                // Update chart labels if they exist
+                if (this.barChart) {
+                    this.barChart.data.datasets[0].label = translations[lang].income;
+                    this.barChart.data.datasets[1].label = translations[lang].expense;
+                    this.barChart.update();
+                }
+                
+                // Update UI to reflect new language
+                this.updateUI();
+            }
+
+            validateForm() {
+                let isValid = true;
+                
+                if (!this.descriptionInput.value.trim()) {
+                    this.showError('description', 'descriptionRequired');
+                    isValid = false;
+                } else {
+                    this.hideError('description');
+                }
+                
+                const amount = parseFloat(this.amountInput.value);
+                if (isNaN(amount) || amount <= 0) {
+                    this.showError('amount', 'amountRequired');
+                    isValid = false;
+                } else {
+                    this.hideError('amount');
+                }
+                
+                if (!this.typeInput.value) {
+                    this.showError('type', 'typeRequired');
+                    isValid = false;
+                } else {
+                    this.hideError('type');
+                }
+                
+                if (!this.categoryInput.value) {
+                    this.showError('category', 'categoryRequired');
+                    isValid = false;
+                } else {
+                    this.hideError('category');
+                }
+                
+                return isValid;
+            }
+
+            showError(fieldName, errorKey) {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                field.classList.add('input-error');
+                errorElement.style.display = 'block';
+                
+                if (translations[this.currentLanguage] && translations[this.currentLanguage][errorKey]) {
+                    errorElement.textContent = translations[this.currentLanguage][errorKey];
+                }
+            }
+
+            hideError(fieldName) {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                field.classList.remove('input-error');
+                errorElement.style.display = 'none';
             }
 
             addTransaction() {
+                if (!this.validateForm()) {
+                    return;
+                }
+
                 const description = this.descriptionInput.value.trim();
                 const amount = parseFloat(this.amountInput.value);
                 const type = this.typeInput.value;
                 const category = this.categoryInput.value;
 
-                if (!description || isNaN(amount) || amount <= 0 || !type || !category) {
-                    alert('Please fill in all fields correctly.');
-                    return;
+                if (this.editingId) {
+                    // Update existing transaction
+                    const index = this.transactions.findIndex(t => t.id === this.editingId);
+                    if (index !== -1) {
+                        this.transactions[index] = {
+                            ...this.transactions[index],
+                            description,
+                            amount,
+                            type,
+                            category
+                        };
+                        this.showNotification('transactionUpdated');
+                        this.editingId = null;
+                        this.cancelEditBtn.style.display = 'none';
+                        this.submitBtn.textContent = translations[this.currentLanguage].addTransaction;
+                    }
+                } else {
+                    // Add new transaction
+                    const transaction = {
+                        id: Date.now().toString(),
+                        description,
+                        amount,
+                        type,
+                        category,
+                        date: new Date().toISOString()
+                    };
+
+                    this.transactions.unshift(transaction);
+                    this.showNotification('transactionAdded');
                 }
 
-                const transaction = {
-                    id: Date.now().toString(),
-                    description,
-                    amount,
-                    type,
-                    category,
-                    date: new Date().toISOString()
-                };
-
-                this.transactions.push(transaction);
                 this.saveToLocalStorage();
                 this.updateUI();
                 this.updateCharts();
+                this.updateFilterOptions();
                 this.transactionForm.reset();
             }
 
+            editTransaction(id) {
+                const transaction = this.transactions.find(t => t.id === id);
+                if (transaction) {
+                    this.descriptionInput.value = transaction.description;
+                    this.amountInput.value = transaction.amount;
+                    this.typeInput.value = transaction.type;
+                    this.categoryInput.value = transaction.category;
+                    
+                    this.editingId = id;
+                    this.cancelEditBtn.style.display = 'block';
+                    this.submitBtn.textContent = translations[this.currentLanguage].edit;
+                    
+                    // Scroll to form
+                    this.transactionForm.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            cancelEdit() {
+                this.editingId = null;
+                this.cancelEditBtn.style.display = 'none';
+                this.submitBtn.textContent = translations[this.currentLanguage].addTransaction;
+                this.transactionForm.reset();
+                
+                // Clear any validation errors
+                ['description', 'amount', 'type', 'category'].forEach(field => {
+                    this.hideError(field);
+                });
+            }
+
             deleteTransaction(id) {
-                this.transactions = this.transactions.filter(transaction => transaction.id !== id);
-                this.saveToLocalStorage();
-                this.updateUI();
-                this.updateCharts();
+                if (confirm(translations[this.currentLanguage].confirmDelete)) {
+                    this.transactions = this.transactions.filter(transaction => transaction.id !== id);
+                    this.saveToLocalStorage();
+                    this.updateUI();
+                    this.updateCharts();
+                    this.updateFilterOptions();
+                    this.showNotification('transactionDeleted');
+                }
+            }
+
+            getFilteredTransactions() {
+                let filtered = this.transactions;
+
+                // Filter by time range
+                if (this.filters.timeRange !== 'all') {
+                    const now = new Date();
+                    let startDate;
+
+                    if (this.filters.timeRange === 'month') {
+                        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    } else if (this.filters.timeRange === 'year') {
+                        startDate = new Date(now.getFullYear(), 0, 1);
+                    }
+
+                    filtered = filtered.filter(transaction => {
+                        const transactionDate = new Date(transaction.date);
+                        return transactionDate >= startDate;
+                    });
+                }
+
+                // Filter by category
+                if (this.filters.category !== 'all') {
+                    filtered = filtered.filter(transaction => transaction.category === this.filters.category);
+                }
+
+                // Filter by search
+                if (this.filters.search) {
+                    filtered = filtered.filter(transaction => 
+                        transaction.description.toLowerCase().includes(this.filters.search) ||
+                        transaction.category.toLowerCase().includes(this.filters.search)
+                    );
+                }
+
+                return filtered;
             }
 
             calculateTotals() {
-                const income = this.transactions
+                const filteredTransactions = this.getFilteredTransactions();
+                
+                const income = filteredTransactions
                     .filter(t => t.type === 'income')
                     .reduce((sum, t) => sum + t.amount, 0);
 
-                const expenses = this.transactions
+                const expenses = filteredTransactions
                     .filter(t => t.type === 'expense')
                     .reduce((sum, t) => sum + t.amount, 0);
 
@@ -470,7 +1458,7 @@
                 this.transactions.forEach(transaction => {
                     const date = new Date(transaction.date);
                     const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-                    const monthName = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    const monthName = date.toLocaleDateString(this.currentLanguage, { month: 'short', year: 'numeric' });
                     
                     if (!monthlyData[monthYear]) {
                         monthlyData[monthYear] = {
@@ -487,7 +1475,6 @@
                     }
                 });
 
-                // Sort by date
                 return Object.keys(monthlyData)
                     .sort()
                     .map(key => monthlyData[key]);
@@ -498,14 +1485,17 @@
                 const barCtx = document.getElementById('bar-chart').getContext('2d');
 
                 this.pieChart = new Chart(pieCtx, {
-                    type: 'pie',
+                    type: this.chartType,
                     data: {
                         labels: [],
                         datasets: [{
                             data: [],
                             backgroundColor: [
                                 '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-                                '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                                '#9966FF', '#FF9F40', '#C9CBCF', '#8E44AD',
+                                '#3498DB', '#2ECC71', '#E74C3C', '#F39C12',
+                                '#1ABC9C', '#34495E', '#95A5A6', '#D35400',
+                                '#16A085', '#27AE60', '#2980B9', '#9B59B6'
                             ],
                             borderWidth: 2,
                             borderColor: '#fff'
@@ -519,7 +1509,10 @@
                                 position: 'bottom',
                                 labels: {
                                     padding: 20,
-                                    usePointStyle: true
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 11
+                                    }
                                 }
                             },
                             tooltip: {
@@ -528,7 +1521,7 @@
                                         const label = context.label || '';
                                         const value = context.raw || 0;
                                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
                                         return `${label}: ${this.formatCurrency(value)} (${percentage}%)`;
                                     }
                                 }
@@ -543,14 +1536,14 @@
                         labels: [],
                         datasets: [
                             {
-                                label: 'Income',
+                                label: translations[this.currentLanguage].income,
                                 data: [],
                                 backgroundColor: '#27ae60',
                                 borderColor: '#219a52',
                                 borderWidth: 1
                             },
                             {
-                                label: 'Expenses',
+                                label: translations[this.currentLanguage].expense,
                                 data: [],
                                 backgroundColor: '#e74c3c',
                                 borderColor: '#c0392b',
@@ -606,65 +1599,166 @@
                 this.barChart.update();
             }
 
+            toggleChartType() {
+                this.chartType = this.chartType === 'pie' ? 'doughnut' : 'pie';
+                this.pieChart.config.type = this.chartType;
+                this.pieChart.update();
+                
+                // Update button text
+                const key = this.chartType === 'pie' ? 'switchToDoughnut' : 'switchToPie';
+                this.toggleChartBtn.textContent = translations[this.currentLanguage][key];
+            }
+
+            updateFilterOptions() {
+                // Update category filter
+                const categories = [...new Set(this.transactions.map(t => t.category))];
+                this.categoryFilter.innerHTML = '<option value="all">' + translations[this.currentLanguage].allCategories + '</option>';
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    this.categoryFilter.appendChild(option);
+                });
+            }
+
             updateUI() {
                 const { income, expenses, balance } = this.calculateTotals();
+                const filteredTransactions = this.getFilteredTransactions();
 
                 // Update summary cards
                 this.totalIncomeElement.textContent = this.formatCurrency(income);
                 this.totalExpensesElement.textContent = this.formatCurrency(expenses);
                 this.balanceElement.textContent = this.formatCurrency(balance);
 
-                // Update balance color based on value
-                this.balanceElement.style.color = balance >= 0 ? '#27ae60' : '#e74c3c';
+                // Update balance color and progress
+                this.balanceElement.style.color = balance >= 0 ? 'var(--income-color)' : 'var(--expense-color)';
+                
+                // Calculate progress (based on income vs expenses)
+                let progressWidth = 0;
+                let progressClass = '';
+                
+                if (income > 0) {
+                    progressWidth = Math.min((expenses / income) * 100, 100);
+                    
+                    if (progressWidth > 80) {
+                        progressClass = 'danger';
+                    } else if (progressWidth > 60) {
+                        progressClass = 'warning';
+                    }
+                }
+                
+                this.balanceProgress.style.width = `${progressWidth}%`;
+                this.balanceProgress.className = `progress-fill ${progressClass}`;
 
                 // Update transactions list
-                this.renderTransactions();
+                this.renderTransactions(filteredTransactions);
             }
 
-            renderTransactions() {
-                if (this.transactions.length === 0) {
+            renderTransactions(transactions) {
+                if (transactions.length === 0) {
                     this.transactionsList.innerHTML = `
                         <div class="empty-state">
-                            No transactions yet. Add your first transaction above!
+                            ${translations[this.currentLanguage].noTransactions}
                         </div>
                     `;
                     return;
                 }
 
-                // Sort transactions by date (newest first)
-                const sortedTransactions = [...this.transactions].sort((a, b) => 
-                    new Date(b.date) - new Date(a.date)
-                );
-
-                this.transactionsList.innerHTML = sortedTransactions
+                this.transactionsList.innerHTML = transactions
                     .map(transaction => {
                         const date = new Date(transaction.date);
-                        const formattedDate = date.toLocaleDateString('en-US', {
+                        const formattedDate = date.toLocaleDateString(this.currentLanguage, {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric'
+                        });
+                        const time = date.toLocaleTimeString(this.currentLanguage, {
+                            hour: '2-digit',
+                            minute: '2-digit'
                         });
                         
                         return `
                         <div class="transaction-item ${transaction.type}">
                             <div class="transaction-info">
                                 <div class="transaction-description">${transaction.description}</div>
-                                <div class="transaction-category">${transaction.category} • ${formattedDate}</div>
+                                <div class="transaction-category">${transaction.category}</div>
+                                <div class="transaction-date">${formattedDate} at ${time}</div>
                             </div>
                             <div class="transaction-amount ${transaction.type}">
                                 ${transaction.type === 'income' ? '+' : '-'}${this.formatCurrency(transaction.amount)}
                             </div>
-                            <button class="delete-btn" onclick="budgetTracker.deleteTransaction('${transaction.id}')">
-                                Delete
-                            </button>
+                            <div class="transaction-actions">
+                                <button class="action-btn edit-btn" onclick="budgetTracker.editTransaction('${transaction.id}')" title="${translations[this.currentLanguage].edit}">
+                                    ✏️
+                                </button>
+                                <button class="action-btn delete-btn" onclick="budgetTracker.deleteTransaction('${transaction.id}')" title="${translations[this.currentLanguage].delete}">
+                                    🗑️
+                                </button>
+                            </div>
                         </div>
                     `}).join('');
             }
 
+            showNotification(key, type = 'success') {
+                const message = translations[this.currentLanguage][key] || key;
+                this.notification.textContent = message;
+                this.notification.className = `notification ${type} show`;
+                
+                setTimeout(() => {
+                    this.notification.classList.remove('show');
+                }, 3000);
+            }
+
+            exportToCSV() {
+                const headers = ['Date', 'Description', 'Type', 'Category', 'Amount'];
+                const csvContent = [
+                    headers.join(','),
+                    ...this.transactions.map(transaction => [
+                        new Date(transaction.date).toLocaleDateString(),
+                        `"${transaction.description}"`,
+                        transaction.type,
+                        transaction.category,
+                        transaction.amount
+                    ].join(','))
+                ].join('\n');
+
+                this.downloadFile(csvContent, 'budget-data.csv', 'text/csv');
+                this.showNotification('dataExported');
+            }
+
+            exportToJSON() {
+                const jsonContent = JSON.stringify(this.transactions, null, 2);
+                this.downloadFile(jsonContent, 'budget-data.json', 'application/json');
+                this.showNotification('dataExported');
+            }
+
+            downloadFile(content, fileName, contentType) {
+                const blob = new Blob([content], { type: contentType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            clearAllData() {
+                if (confirm(translations[this.currentLanguage].confirmClear)) {
+                    this.transactions = [];
+                    this.saveToLocalStorage();
+                    this.updateUI();
+                    this.updateCharts();
+                    this.updateFilterOptions();
+                    this.showNotification('dataCleared');
+                }
+            }
+
             formatCurrency(amount) {
-                return new Intl.NumberFormat('en-US', {
+                return new Intl.NumberFormat(this.currentLanguage === 'en' ? 'en-US' : this.currentLanguage, {
                     style: 'currency',
-                    currency: 'USD'
+                    currency: this.currentLanguage === 'en' ? 'USD' : 'EUR'
                 }).format(amount);
             }
 
