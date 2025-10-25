@@ -6,18 +6,6 @@
     <title>Budget Tracker</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --income-color: #27ae60;
-            --expense-color: #e74c3c;
-            --warning-color: #f39c12;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-            --border-radius: 10px;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -29,34 +17,26 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            line-height: 1.6;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: var(--border-radius);
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, var(--dark-color), #34495e);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             color: white;
             padding: 30px;
             text-align: center;
-            position: relative;
         }
 
         header h1 {
             font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            opacity: 0.8;
             font-weight: 300;
         }
 
@@ -71,27 +51,22 @@
         .card {
             background: white;
             padding: 25px;
-            border-radius: var(--border-radius);
+            border-radius: 10px;
             text-align: center;
-            box-shadow: var(--box-shadow);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border-left: 4px solid;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
         }
 
         .income-card {
-            border-left-color: var(--income-color);
+            border-left-color: #27ae60;
         }
 
         .expense-card {
-            border-left-color: var(--expense-color);
+            border-left-color: #e74c3c;
         }
 
         .balance-card {
-            border-left-color: var(--primary-color);
+            border-left-color: #3498db;
         }
 
         .card h3 {
@@ -105,7 +80,7 @@
         .card p {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--dark-color);
+            color: #2c3e50;
         }
 
         .charts-container {
@@ -114,45 +89,21 @@
             gap: 30px;
             padding: 30px;
             background: #f8f9fa;
-            border-bottom: 1px solid var(--light-color);
+            border-bottom: 1px solid #ecf0f1;
         }
 
         .chart-card {
             background: white;
             padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .chart-card h3 {
             text-align: center;
             margin-bottom: 20px;
-            color: var(--dark-color);
+            color: #2c3e50;
             font-size: 1.2rem;
-        }
-
-        .chart-actions {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .chart-toggle {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: var(--transition);
-        }
-
-        .chart-toggle:hover {
-            background: #2980b9;
         }
 
         .chart-card canvas {
@@ -161,12 +112,12 @@
 
         .transaction-form {
             padding: 30px;
-            border-bottom: 1px solid var(--light-color);
+            border-bottom: 1px solid #ecf0f1;
         }
 
         .transaction-form h3 {
             margin-bottom: 20px;
-            color: var(--dark-color);
+            color: #2c3e50;
         }
 
         .form-row {
@@ -181,89 +132,45 @@
             flex-direction: column;
         }
 
-        .form-label {
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: var(--dark-color);
-        }
-
         input, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid var(--light-color);
-            border-radius: var(--border-radius);
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
             font-size: 16px;
-            transition: var(--transition);
+            transition: border-color 0.3s ease;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        .input-error {
-            border-color: var(--expense-color);
-        }
-
-        .error-message {
-            color: var(--expense-color);
-            font-size: 0.8rem;
-            margin-top: 5px;
-            display: none;
+            border-color: #3498db;
         }
 
         button {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.2s ease;
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .button-secondary {
-            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            background: linear-gradient(135deg, #2980b9, #3498db);
         }
 
         .transactions-section {
             padding: 30px;
         }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .transactions-section h3 {
             margin-bottom: 20px;
-        }
-
-        .section-header h3 {
-            color: var(--dark-color);
-        }
-
-        .filter-controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .filter-select {
-            padding: 8px 12px;
-            border: 1px solid var(--light-color);
-            border-radius: 5px;
-            background: white;
+            color: #2c3e50;
         }
 
         .transactions-list {
@@ -278,34 +185,21 @@
             padding: 15px;
             background: #f8f9fa;
             margin-bottom: 10px;
-            border-radius: var(--border-radius);
+            border-radius: 8px;
             border-left: 4px solid;
-            transition: var(--transition);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            transition: transform 0.2s ease;
         }
 
         .transaction-item:hover {
             transform: translateX(5px);
-            background: #e8f4fc;
         }
 
         .transaction-item.income {
-            border-left-color: var(--income-color);
+            border-left-color: #27ae60;
         }
 
         .transaction-item.expense {
-            border-left-color: var(--expense-color);
+            border-left-color: #e74c3c;
         }
 
         .transaction-info {
@@ -314,7 +208,7 @@
 
         .transaction-description {
             font-weight: bold;
-            color: var(--dark-color);
+            color: #2c3e50;
             margin-bottom: 5px;
         }
 
@@ -323,10 +217,6 @@
             color: #7f8c8d;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            background: var(--light-color);
-            padding: 2px 8px;
-            border-radius: 12px;
-            display: inline-block;
         }
 
         .transaction-amount {
@@ -336,33 +226,26 @@
         }
 
         .transaction-amount.income {
-            color: var(--income-color);
+            color: #27ae60;
         }
 
         .transaction-amount.expense {
-            color: var(--expense-color);
-        }
-
-        .transaction-date {
-            font-size: 0.8rem;
-            color: #95a5a6;
-            margin-top: 2px;
+            color: #e74c3c;
         }
 
         .delete-btn {
-            background: var(--expense-color);
+            background: #e74c3c;
             color: white;
             border: none;
             padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 12px;
-            transition: var(--transition);
+            transition: background 0.3s ease;
         }
 
         .delete-btn:hover {
             background: #c0392b;
-            transform: scale(1.05);
         }
 
         .empty-state {
@@ -372,36 +255,10 @@
             font-style: italic;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background: var(--income-color);
-            color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            background: var(--expense-color);
-        }
-
-        .notification.warning {
-            background: var(--warning-color);
-        }
-
         /* Category optgroup styling */
         optgroup {
             font-weight: bold;
-            color: var(--dark-color);
+            color: #2c3e50;
         }
 
         optgroup option {
@@ -450,28 +307,8 @@
                 padding: 15px;
             }
             
-            .chart-actions {
-                position: static;
-                justify-content: center;
-                margin-bottom: 15px;
-            }
-            
             .form-row {
                 grid-template-columns: 1fr;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-            
-            .filter-controls {
-                width: 100%;
-            }
-            
-            .filter-select {
-                flex: 1;
             }
             
             header h1 {
@@ -487,30 +324,12 @@
                 margin: 10px 0;
             }
         }
-
-        .export-section {
-            padding: 20px 30px;
-            border-top: 1px solid var(--light-color);
-            background: #f8f9fa;
-        }
-
-        .export-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>💰 Budget Tracker</h1>
-            <p class="subtitle">Track your income and expenses with powerful insights</p>
         </header>
 
         <div class="summary-cards">
@@ -531,9 +350,6 @@
         <div class="charts-container">
             <div class="chart-card">
                 <h3>Expenses by Category</h3>
-                <div class="chart-actions">
-                    <button class="chart-toggle" id="toggle-chart">Switch to Doughnut</button>
-                </div>
                 <canvas id="pie-chart"></canvas>
             </div>
             <div class="chart-card">
@@ -546,28 +362,21 @@
             <h3>Add Transaction</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label" for="description">Description</label>
-                    <input type="text" id="description" placeholder="Enter description" required>
-                    <div class="error-message" id="description-error">Description is required</div>
+                    <input type="text" id="description" placeholder="Description" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="amount">Amount</label>
-                    <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" required>
-                    <div class="error-message" id="amount-error">Please enter a valid amount</div>
+                    <input type="number" id="amount" placeholder="Amount" step="0.01" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label" for="type">Type</label>
                     <select id="type" required>
                         <option value="">Select Type</option>
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
                     </select>
-                    <div class="error-message" id="type-error">Please select a type</div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="category">Category</label>
                     <select id="category" required>
                         <option value="">Select Category</option>
                         
@@ -650,46 +459,18 @@
                             <option value="work-expenses">Work Expenses</option>
                         </optgroup>
                     </select>
-                    <div class="error-message" id="category-error">Please select a category</div>
                 </div>
             </div>
-            <button type="submit" id="submit-btn">Add Transaction</button>
+            <button type="submit">Add Transaction</button>
         </form>
 
         <div class="transactions-section">
-            <div class="section-header">
-                <h3>Transaction History</h3>
-                <div class="filter-controls">
-                    <select class="filter-select" id="filter-type">
-                        <option value="all">All Types</option>
-                        <option value="income">Income Only</option>
-                        <option value="expense">Expense Only</option>
-                    </select>
-                    <select class="filter-select" id="filter-category">
-                        <option value="all">All Categories</option>
-                    </select>
-                    <select class="filter-select" id="filter-month">
-                        <option value="all">All Time</option>
-                    </select>
-                </div>
-            </div>
+            <h3>Transaction History</h3>
             <div id="transactions-list" class="transactions-list">
                 <!-- Transactions will be dynamically inserted here -->
             </div>
         </div>
-
-        <div class="export-section">
-            <h3>Data Management</h3>
-            <div class="export-buttons">
-                <button class="button-secondary" id="export-csv">Export to CSV</button>
-                <button class="button-secondary" id="export-json">Export to JSON</button>
-                <button class="button-secondary" id="import-data">Import Data</button>
-                <button class="delete-btn" id="clear-data">Clear All Data</button>
-            </div>
-        </div>
     </div>
-
-    <div class="notification" id="notification"></div>
 
     <script>
         class BudgetTracker {
@@ -697,48 +478,22 @@
                 this.transactions = JSON.parse(localStorage.getItem('budgetTransactions')) || [];
                 this.pieChart = null;
                 this.barChart = null;
-                this.chartType = 'pie';
-                this.filters = {
-                    type: 'all',
-                    category: 'all',
-                    month: 'all'
-                };
                 this.initializeElements();
                 this.attachEventListeners();
                 this.updateUI();
                 this.initializeCharts();
-                this.updateFilterOptions();
             }
 
             initializeElements() {
-                // Form elements
                 this.transactionForm = document.getElementById('transaction-form');
                 this.descriptionInput = document.getElementById('description');
                 this.amountInput = document.getElementById('amount');
                 this.typeInput = document.getElementById('type');
                 this.categoryInput = document.getElementById('category');
-                this.submitBtn = document.getElementById('submit-btn');
-                
-                // Display elements
                 this.transactionsList = document.getElementById('transactions-list');
                 this.totalIncomeElement = document.getElementById('total-income');
                 this.totalExpensesElement = document.getElementById('total-expenses');
                 this.balanceElement = document.getElementById('balance');
-                
-                // Filter elements
-                this.filterType = document.getElementById('filter-type');
-                this.filterCategory = document.getElementById('filter-category');
-                this.filterMonth = document.getElementById('filter-month');
-                
-                // Action elements
-                this.toggleChartBtn = document.getElementById('toggle-chart');
-                this.exportCsvBtn = document.getElementById('export-csv');
-                this.exportJsonBtn = document.getElementById('export-json');
-                this.importDataBtn = document.getElementById('import-data');
-                this.clearDataBtn = document.getElementById('clear-data');
-                
-                // Notification element
-                this.notification = document.getElementById('notification');
             }
 
             attachEventListeners() {
@@ -746,87 +501,18 @@
                     e.preventDefault();
                     this.addTransaction();
                 });
-
-                // Real-time validation
-                this.descriptionInput.addEventListener('blur', () => this.validateField('description'));
-                this.amountInput.addEventListener('blur', () => this.validateField('amount'));
-                this.typeInput.addEventListener('change', () => this.validateField('type'));
-                this.categoryInput.addEventListener('change', () => this.validateField('category'));
-
-                // Filter events
-                this.filterType.addEventListener('change', (e) => {
-                    this.filters.type = e.target.value;
-                    this.updateUI();
-                });
-
-                this.filterCategory.addEventListener('change', (e) => {
-                    this.filters.category = e.target.value;
-                    this.updateUI();
-                });
-
-                this.filterMonth.addEventListener('change', (e) => {
-                    this.filters.month = e.target.value;
-                    this.updateUI();
-                });
-
-                // Action events
-                this.toggleChartBtn.addEventListener('click', () => this.toggleChartType());
-                this.exportCsvBtn.addEventListener('click', () => this.exportToCSV());
-                this.exportJsonBtn.addEventListener('click', () => this.exportToJSON());
-                this.importDataBtn.addEventListener('click', () => this.importData());
-                this.clearDataBtn.addEventListener('click', () => this.clearAllData());
-            }
-
-            validateField(fieldName) {
-                const field = document.getElementById(fieldName);
-                const errorElement = document.getElementById(`${fieldName}-error`);
-                
-                let isValid = true;
-                let errorMessage = '';
-
-                switch(fieldName) {
-                    case 'description':
-                        isValid = field.value.trim().length > 0;
-                        errorMessage = 'Description is required';
-                        break;
-                    case 'amount':
-                        isValid = !isNaN(parseFloat(field.value)) && parseFloat(field.value) > 0;
-                        errorMessage = 'Please enter a valid amount greater than 0';
-                        break;
-                    case 'type':
-                    case 'category':
-                        isValid = field.value !== '';
-                        errorMessage = `Please select a ${fieldName}`;
-                        break;
-                }
-
-                if (!isValid) {
-                    field.classList.add('input-error');
-                    errorElement.style.display = 'block';
-                    errorElement.textContent = errorMessage;
-                } else {
-                    field.classList.remove('input-error');
-                    errorElement.style.display = 'none';
-                }
-
-                return isValid;
-            }
-
-            validateForm() {
-                const fields = ['description', 'amount', 'type', 'category'];
-                return fields.every(field => this.validateField(field));
             }
 
             addTransaction() {
-                if (!this.validateForm()) {
-                    this.showNotification('Please fix the errors in the form', 'error');
-                    return;
-                }
-
                 const description = this.descriptionInput.value.trim();
                 const amount = parseFloat(this.amountInput.value);
                 const type = this.typeInput.value;
                 const category = this.categoryInput.value;
+
+                if (!description || isNaN(amount) || amount <= 0 || !type || !category) {
+                    alert('Please fill in all fields correctly.');
+                    return;
+                }
 
                 const transaction = {
                     id: Date.now().toString(),
@@ -837,51 +523,26 @@
                     date: new Date().toISOString()
                 };
 
-                this.transactions.unshift(transaction); // Add to beginning for newest first
+                this.transactions.push(transaction);
                 this.saveToLocalStorage();
                 this.updateUI();
                 this.updateCharts();
-                this.updateFilterOptions();
                 this.transactionForm.reset();
-                
-                this.showNotification(`${type === 'income' ? 'Income' : 'Expense'} added successfully!`);
             }
 
             deleteTransaction(id) {
-                if (confirm('Are you sure you want to delete this transaction?')) {
-                    this.transactions = this.transactions.filter(transaction => transaction.id !== id);
-                    this.saveToLocalStorage();
-                    this.updateUI();
-                    this.updateCharts();
-                    this.updateFilterOptions();
-                    this.showNotification('Transaction deleted successfully');
-                }
-            }
-
-            getFilteredTransactions() {
-                return this.transactions.filter(transaction => {
-                    const matchesType = this.filters.type === 'all' || transaction.type === this.filters.type;
-                    const matchesCategory = this.filters.category === 'all' || transaction.category === this.filters.category;
-                    
-                    let matchesMonth = true;
-                    if (this.filters.month !== 'all') {
-                        const transactionDate = new Date(transaction.date);
-                        const transactionMonth = `${transactionDate.getFullYear()}-${(transactionDate.getMonth() + 1).toString().padStart(2, '0')}`;
-                        matchesMonth = transactionMonth === this.filters.month;
-                    }
-                    
-                    return matchesType && matchesCategory && matchesMonth;
-                });
+                this.transactions = this.transactions.filter(transaction => transaction.id !== id);
+                this.saveToLocalStorage();
+                this.updateUI();
+                this.updateCharts();
             }
 
             calculateTotals() {
-                const filteredTransactions = this.getFilteredTransactions();
-                
-                const income = filteredTransactions
+                const income = this.transactions
                     .filter(t => t.type === 'income')
                     .reduce((sum, t) => sum + t.amount, 0);
 
-                const expenses = filteredTransactions
+                const expenses = this.transactions
                     .filter(t => t.type === 'expense')
                     .reduce((sum, t) => sum + t.amount, 0);
 
@@ -935,17 +596,17 @@
                 const barCtx = document.getElementById('bar-chart').getContext('2d');
 
                 this.pieChart = new Chart(pieCtx, {
-                    type: this.chartType,
+                    type: 'pie',
                     data: {
                         labels: [],
                         datasets: [{
                             data: [],
                             backgroundColor: [
                                 '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-                                '#9966FF', '#FF9F40', '#C9CBCF', '#8E44AD',
-                                '#3498DB', '#2ECC71', '#E74C3C', '#F39C12',
-                                '#1ABC9C', '#34495E', '#95A5A6', '#D35400',
-                                '#16A085', '#27AE60', '#2980B9', '#9B59B6'
+                                '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF',
+                                '#8E44AD', '#3498DB', '#2ECC71', '#E74C3C',
+                                '#F39C12', '#1ABC9C', '#34495E', '#95A5A6',
+                                '#D35400', '#16A085', '#27AE60', '#2980B9'
                             ],
                             borderWidth: 2,
                             borderColor: '#fff'
@@ -959,10 +620,7 @@
                                 position: 'bottom',
                                 labels: {
                                     padding: 20,
-                                    usePointStyle: true,
-                                    font: {
-                                        size: 11
-                                    }
+                                    usePointStyle: true
                                 }
                             },
                             tooltip: {
@@ -971,7 +629,7 @@
                                         const label = context.label || '';
                                         const value = context.raw || 0;
                                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
+                                        const percentage = ((value / total) * 100).toFixed(1);
                                         return `${label}: ${this.formatCurrency(value)} (${percentage}%)`;
                                     }
                                 }
@@ -1049,36 +707,6 @@
                 this.barChart.update();
             }
 
-            toggleChartType() {
-                this.chartType = this.chartType === 'pie' ? 'doughnut' : 'pie';
-                this.pieChart.config.type = this.chartType;
-                this.pieChart.update();
-                this.toggleChartBtn.textContent = `Switch to ${this.chartType === 'pie' ? 'Doughnut' : 'Pie'}`;
-            }
-
-            updateFilterOptions() {
-                // Update category filter
-                const categories = [...new Set(this.transactions.map(t => t.category))];
-                this.filterCategory.innerHTML = '<option value="all">All Categories</option>';
-                categories.forEach(category => {
-                    this.filterCategory.innerHTML += `<option value="${category}">${category}</option>`;
-                });
-
-                // Update month filter
-                const months = {};
-                this.transactions.forEach(transaction => {
-                    const date = new Date(transaction.date);
-                    const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-                    const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                    months[monthYear] = monthName;
-                });
-
-                this.filterMonth.innerHTML = '<option value="all">All Time</option>';
-                Object.keys(months).sort().reverse().forEach(monthKey => {
-                    this.filterMonth.innerHTML += `<option value="${monthKey}">${months[monthKey]}</option>`;
-                });
-            }
-
             updateUI() {
                 const { income, expenses, balance } = this.calculateTotals();
 
@@ -1088,25 +716,28 @@
                 this.balanceElement.textContent = this.formatCurrency(balance);
 
                 // Update balance color based on value
-                this.balanceElement.style.color = balance >= 0 ? 'var(--income-color)' : 'var(--expense-color)';
+                this.balanceElement.style.color = balance >= 0 ? '#27ae60' : '#e74c3c';
 
                 // Update transactions list
                 this.renderTransactions();
             }
 
             renderTransactions() {
-                const filteredTransactions = this.getFilteredTransactions();
-
-                if (filteredTransactions.length === 0) {
+                if (this.transactions.length === 0) {
                     this.transactionsList.innerHTML = `
                         <div class="empty-state">
-                            No transactions found. ${this.transactions.length === 0 ? 'Add your first transaction above!' : 'Try changing your filters.'}
+                            No transactions yet. Add your first transaction above!
                         </div>
                     `;
                     return;
                 }
 
-                this.transactionsList.innerHTML = filteredTransactions
+                // Sort transactions by date (newest first)
+                const sortedTransactions = [...this.transactions].sort((a, b) => 
+                    new Date(b.date) - new Date(a.date)
+                );
+
+                this.transactionsList.innerHTML = sortedTransactions
                     .map(transaction => {
                         const date = new Date(transaction.date);
                         const formattedDate = date.toLocaleDateString('en-US', {
@@ -1114,17 +745,12 @@
                             month: 'short',
                             day: 'numeric'
                         });
-                        const time = date.toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
                         
                         return `
                         <div class="transaction-item ${transaction.type}">
                             <div class="transaction-info">
                                 <div class="transaction-description">${transaction.description}</div>
-                                <div class="transaction-category">${transaction.category}</div>
-                                <div class="transaction-date">${formattedDate} at ${time}</div>
+                                <div class="transaction-category">${transaction.category} • ${formattedDate}</div>
                             </div>
                             <div class="transaction-amount ${transaction.type}">
                                 ${transaction.type === 'income' ? '+' : '-'}${this.formatCurrency(transaction.amount)}
@@ -1136,4 +762,20 @@
                     `}).join('');
             }
 
-            showNotification(message,
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+            }
+
+            saveToLocalStorage() {
+                localStorage.setItem('budgetTransactions', JSON.stringify(this.transactions));
+            }
+        }
+
+        // Initialize the budget tracker when the page loads
+        const budgetTracker = new BudgetTracker();
+    </script>
+</body>
+</html>
