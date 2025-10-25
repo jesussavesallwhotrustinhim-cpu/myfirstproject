@@ -120,16 +120,8 @@
             color: #2c3e50;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 20px;
         }
 
         input, select {
@@ -255,18 +247,6 @@
             font-style: italic;
         }
 
-        /* Category optgroup styling */
-        optgroup {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        optgroup option {
-            font-weight: normal;
-            color: #34495e;
-            padding-left: 10px;
-        }
-
         /* Scrollbar styling */
         .transactions-list::-webkit-scrollbar {
             width: 6px;
@@ -305,10 +285,6 @@
             
             .chart-card {
                 padding: 15px;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
             }
             
             header h1 {
@@ -360,106 +336,32 @@
 
         <form id="transaction-form" class="transaction-form">
             <h3>Add Transaction</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <input type="text" id="description" placeholder="Description" required>
-                </div>
-                <div class="form-group">
-                    <input type="number" id="amount" placeholder="Amount" step="0.01" required>
-                </div>
+            <div class="form-group">
+                <input type="text" id="description" placeholder="Description" required>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <select id="type" required>
-                        <option value="">Select Type</option>
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="category" required>
-                        <option value="">Select Category</option>
-                        
-                        <!-- Income Categories -->
-                        <optgroup label="💰 Income">
-                            <option value="salary">Salary/Wages</option>
-                            <option value="freelance">Freelance Work</option>
-                            <option value="bonus">Bonus & Commissions</option>
-                            <option value="investment">Investment Income</option>
-                            <option value="rental">Rental Income</option>
-                            <option value="gift">Gifts & Inheritance</option>
-                            <option value="refund">Refunds & Rebates</option>
-                            <option value="side-business">Side Business</option>
-                        </optgroup>
-                        
-                        <!-- Essential Expenses -->
-                        <optgroup label="🏠 Essential Expenses">
-                            <option value="rent">Rent/Mortgage</option>
-                            <option value="utilities">Utilities (Electric, Water, Gas)</option>
-                            <option value="internet">Internet & Phone</option>
-                            <option value="groceries">Groceries</option>
-                            <option value="transportation">Transportation & Fuel</option>
-                            <option value="insurance">Insurance (Health, Car, Home)</option>
-                            <option value="medical">Medical & Healthcare</option>
-                            <option value="debt">Debt Payments</option>
-                        </optgroup>
-                        
-                        <!-- Lifestyle & Entertainment -->
-                        <optgroup label="🎯 Lifestyle & Entertainment">
-                            <option value="dining">Dining Out & Takeout</option>
-                            <option value="entertainment">Entertainment & Streaming</option>
-                            <option value="shopping">Shopping & Personal Care</option>
-                            <option value="subscriptions">Subscriptions (Apps, Memberships)</option>
-                            <option value="hobbies">Hobbies & Leisure</option>
-                            <option value="fitness">Fitness & Sports</option>
-                        </optgroup>
-                        
-                        <!-- Holidays & Travel -->
-                        <optgroup label="✈️ Holidays & Travel">
-                            <option value="flights">Flights & Transportation</option>
-                            <option value="accommodation">Accommodation</option>
-                            <option value="meals-travel">Meals & Dining (Travel)</option>
-                            <option value="activities">Activities & Tours</option>
-                            <option value="souvenirs">Souvenirs & Shopping</option>
-                            <option value="travel-insurance">Travel Insurance</option>
-                            <option value="vacation-fund">Vacation Savings</option>
-                        </optgroup>
-                        
-                        <!-- Family & Education -->
-                        <optgroup label="👨‍👩‍👧‍👦 Family & Education">
-                            <option value="childcare">Childcare & Education</option>
-                            <option value="pets">Pets & Pet Care</option>
-                            <option value="gifts-donations">Gifts & Donations</option>
-                            <option value="family-activities">Family Activities</option>
-                            <option value="education">Education & Courses</option>
-                            <option value="books">Books & Learning</option>
-                        </optgroup>
-                        
-                        <!-- Savings & Investments -->
-                        <optgroup label="📈 Savings & Investments">
-                            <option value="emergency-fund">Emergency Fund</option>
-                            <option value="retirement">Retirement Savings</option>
-                            <option value="investments">Investments & Stocks</option>
-                            <option value="savings-goal">Savings Goal</option>
-                        </optgroup>
-                        
-                        <!-- Vehicle & Home -->
-                        <optgroup label="🚗 Vehicle & Home">
-                            <option value="car-maintenance">Car Maintenance & Repairs</option>
-                            <option value="home-maintenance">Home Maintenance & Repairs</option>
-                            <option value="furniture">Furniture & Appliances</option>
-                            <option value="renovation">Home Renovation</option>
-                            <option value="parking">Parking & Tolls</option>
-                        </optgroup>
-                        
-                        <!-- Other -->
-                        <optgroup label="📦 Other">
-                            <option value="other">Other Expenses</option>
-                            <option value="fees">Bank Fees & Charges</option>
-                            <option value="work-expenses">Work Expenses</option>
-                        </optgroup>
-                    </select>
-                </div>
+            <div class="form-group">
+                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <select id="type" required>
+                    <option value="">Select Type</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="category" required>
+                    <option value="">Select Category</option>
+                    <option value="salary">Salary</option>
+                    <option value="food">Food</option>
+                    <option value="rent">Rent</option>
+                    <option value="transport">Transport</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="other">Other</option>
+                </select>
             </div>
             <button type="submit">Add Transaction</button>
         </form>
@@ -603,10 +505,7 @@
                             data: [],
                             backgroundColor: [
                                 '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-                                '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF',
-                                '#8E44AD', '#3498DB', '#2ECC71', '#E74C3C',
-                                '#F39C12', '#1ABC9C', '#34495E', '#95A5A6',
-                                '#D35400', '#16A085', '#27AE60', '#2980B9'
+                                '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
                             ],
                             borderWidth: 2,
                             borderColor: '#fff'
