@@ -396,7 +396,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>💰 Budget Tracker</h1>
+            <h1 data-i18n="appTitle">💰 Budget Tracker</h1>
             <div class="language-selector">
                 <button class="language-btn active" data-lang="en">English</button>
                 <button class="language-btn" data-lang="es">Español</button>
@@ -408,15 +408,15 @@
 
         <div class="summary-cards">
             <div class="card income-card">
-                <h3>Total Income</h3>
+                <h3 data-i18n="totalIncome">Total Income</h3>
                 <p id="total-income">$0.00</p>
             </div>
             <div class="card expense-card">
-                <h3>Total Expenses</h3>
+                <h3 data-i18n="totalExpenses">Total Expenses</h3>
                 <p id="total-expenses">$0.00</p>
             </div>
             <div class="card balance-card">
-                <h3>Balance</h3>
+                <h3 data-i18n="balance">Balance</h3>
                 <p id="balance">$0.00</p>
             </div>
         </div>
@@ -424,142 +424,543 @@
         <div class="controls-panel">
             <div class="filter-controls">
                 <select class="filter-select" id="time-range">
-                    <option value="all">All Time</option>
-                    <option value="month">This Month</option>
-                    <option value="year">This Year</option>
+                    <option value="all" data-i18n="allTime">All Time</option>
+                    <option value="month" data-i18n="thisMonth">This Month</option>
+                    <option value="year" data-i18n="thisYear">This Year</option>
                 </select>
                 <select class="filter-select" id="category-filter">
-                    <option value="all">All Categories</option>
+                    <option value="all" data-i18n="allCategories">All Categories</option>
                 </select>
             </div>
             <div class="export-buttons">
-                <button class="btn btn-primary" id="export-csv">Export CSV</button>
-                <button class="btn btn-secondary" id="export-json">Export JSON</button>
-                <button class="btn btn-danger" id="clear-data">Clear Data</button>
+                <button class="btn btn-primary" id="export-csv" data-i18n="exportCSV">Export CSV</button>
+                <button class="btn btn-secondary" id="export-json" data-i18n="exportJSON">Export JSON</button>
+                <button class="btn btn-danger" id="clear-data" data-i18n="clearData">Clear Data</button>
             </div>
         </div>
 
         <div class="charts-container">
             <div class="chart-card">
-                <h3>Expenses by Category</h3>
+                <h3 data-i18n="expensesByCategory">Expenses by Category</h3>
                 <canvas id="pie-chart"></canvas>
             </div>
             <div class="chart-card">
-                <h3>Monthly Overview</h3>
+                <h3 data-i18n="monthlyOverview">Monthly Overview</h3>
                 <canvas id="bar-chart"></canvas>
             </div>
         </div>
 
         <form id="transaction-form" class="transaction-form">
-            <h3>Add Transaction</h3>
+            <h3 data-i18n="addTransaction">Add Transaction</h3>
             <div class="form-group">
-                <input type="text" id="description" placeholder="Description" required>
+                <input type="text" id="description" data-i18n-placeholder="description" required>
             </div>
             <div class="form-group">
-                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+                <input type="number" id="amount" step="0.01" data-i18n-placeholder="amount" required>
             </div>
             <div class="form-group">
                 <select id="type" required>
-                    <option value="">Select Type</option>
-                    <option value="income">Income</option>
-                    <option value="expense">Expense</option>
+                    <option value="" data-i18n="selectType">Select Type</option>
+                    <option value="income" data-i18n="income">Income</option>
+                    <option value="expense" data-i18n="expense">Expense</option>
                 </select>
             </div>
             <div class="form-group">
                 <select id="category" required>
-                    <option value="">Select Category</option>
+                    <option value="" data-i18n="selectCategory">Select Category</option>
                     <!-- Income Categories -->
-                    <optgroup label="💰 Income">
-                        <option value="salary">Salary/Wages</option>
-                        <option value="freelance">Freelance Work</option>
-                        <option value="bonus">Bonus & Commissions</option>
-                        <option value="investment">Investment Income</option>
-                        <option value="rental">Rental Income</option>
-                        <option value="gift">Gifts & Inheritance</option>
-                        <option value="refund">Refunds & Rebates</option>
-                        <option value="side-business">Side Business</option>
+                    <optgroup label="💰 Income" data-i18n="incomeCategories">
+                        <option value="salary" data-i18n="salary">Salary/Wages</option>
+                        <option value="freelance" data-i18n="freelance">Freelance Work</option>
+                        <option value="bonus" data-i18n="bonus">Bonus & Commissions</option>
+                        <option value="investment" data-i18n="investment">Investment Income</option>
+                        <option value="rental" data-i18n="rental">Rental Income</option>
+                        <option value="gift" data-i18n="gift">Gifts & Inheritance</option>
+                        <option value="refund" data-i18n="refund">Refunds & Rebates</option>
+                        <option value="side-business" data-i18n="sideBusiness">Side Business</option>
                     </optgroup>
                     
                     <!-- Essential Expenses -->
-                    <optgroup label="🏠 Essential Expenses">
-                        <option value="rent">Rent/Mortgage</option>
-                        <option value="utilities">Utilities (Electric, Water, Gas)</option>
-                        <option value="internet">Internet & Phone</option>
-                        <option value="groceries">Groceries</option>
-                        <option value="transportation">Transportation & Fuel</option>
-                        <option value="insurance">Insurance (Health, Car, Home)</option>
-                        <option value="medical">Medical & Healthcare</option>
-                        <option value="debt">Debt Payments</option>
+                    <optgroup label="🏠 Essential Expenses" data-i18n="essentialExpenses">
+                        <option value="rent" data-i18n="rent">Rent/Mortgage</option>
+                        <option value="utilities" data-i18n="utilities">Utilities (Electric, Water, Gas)</option>
+                        <option value="internet" data-i18n="internet">Internet & Phone</option>
+                        <option value="groceries" data-i18n="groceries">Groceries</option>
+                        <option value="transportation" data-i18n="transportation">Transportation & Fuel</option>
+                        <option value="insurance" data-i18n="insurance">Insurance (Health, Car, Home)</option>
+                        <option value="medical" data-i18n="medical">Medical & Healthcare</option>
+                        <option value="debt" data-i18n="debt">Debt Payments</option>
                     </optgroup>
                     
                     <!-- Lifestyle & Entertainment -->
-                    <optgroup label="🎯 Lifestyle & Entertainment">
-                        <option value="dining">Dining Out & Takeout</option>
-                        <option value="entertainment">Entertainment & Streaming</option>
-                        <option value="shopping">Shopping & Personal Care</option>
-                        <option value="subscriptions">Subscriptions (Apps, Memberships)</option>
-                        <option value="hobbies">Hobbies & Leisure</option>
-                        <option value="fitness">Fitness & Sports</option>
+                    <optgroup label="🎯 Lifestyle & Entertainment" data-i18n="lifestyleEntertainment">
+                        <option value="dining" data-i18n="dining">Dining Out & Takeout</option>
+                        <option value="entertainment" data-i18n="entertainment">Entertainment & Streaming</option>
+                        <option value="shopping" data-i18n="shopping">Shopping & Personal Care</option>
+                        <option value="subscriptions" data-i18n="subscriptions">Subscriptions (Apps, Memberships)</option>
+                        <option value="hobbies" data-i18n="hobbies">Hobbies & Leisure</option>
+                        <option value="fitness" data-i18n="fitness">Fitness & Sports</option>
                     </optgroup>
                     
                     <!-- Holidays & Travel -->
-                    <optgroup label="✈️ Holidays & Travel">
-                        <option value="flights">Flights & Transportation</option>
-                        <option value="accommodation">Accommodation</option>
-                        <option value="meals-travel">Meals & Dining (Travel)</option>
-                        <option value="activities">Activities & Tours</option>
-                        <option value="souvenirs">Souvenirs & Shopping</option>
-                        <option value="travel-insurance">Travel Insurance</option>
-                        <option value="vacation-fund">Vacation Savings</option>
+                    <optgroup label="✈️ Holidays & Travel" data-i18n="holidaysTravel">
+                        <option value="flights" data-i18n="flights">Flights & Transportation</option>
+                        <option value="accommodation" data-i18n="accommodation">Accommodation</option>
+                        <option value="meals-travel" data-i18n="mealsTravel">Meals & Dining (Travel)</option>
+                        <option value="activities" data-i18n="activities">Activities & Tours</option>
+                        <option value="souvenirs" data-i18n="souvenirs">Souvenirs & Shopping</option>
+                        <option value="travel-insurance" data-i18n="travelInsurance">Travel Insurance</option>
+                        <option value="vacation-fund" data-i18n="vacationFund">Vacation Savings</option>
                     </optgroup>
                     
                     <!-- Family & Education -->
-                    <optgroup label="👨‍👩‍👧‍👦 Family & Education">
-                        <option value="childcare">Childcare & Education</option>
-                        <option value="pets">Pets & Pet Care</option>
-                        <option value="gifts-donations">Gifts & Donations</option>
-                        <option value="family-activities">Family Activities</option>
-                        <option value="education">Education & Courses</option>
-                        <option value="books">Books & Learning</option>
+                    <optgroup label="👨‍👩‍👧‍👦 Family & Education" data-i18n="familyEducation">
+                        <option value="childcare" data-i18n="childcare">Childcare & Education</option>
+                        <option value="pets" data-i18n="pets">Pets & Pet Care</option>
+                        <option value="gifts-donations" data-i18n="giftsDonations">Gifts & Donations</option>
+                        <option value="family-activities" data-i18n="familyActivities">Family Activities</option>
+                        <option value="education" data-i18n="education">Education & Courses</option>
+                        <option value="books" data-i18n="books">Books & Learning</option>
                     </optgroup>
                     
                     <!-- Savings & Investments -->
-                    <optgroup label="📈 Savings & Investments">
-                        <option value="emergency-fund">Emergency Fund</option>
-                        <option value="retirement">Retirement Savings</option>
-                        <option value="investments">Investments & Stocks</option>
-                        <option value="savings-goal">Savings Goal</option>
+                    <optgroup label="📈 Savings & Investments" data-i18n="savingsInvestments">
+                        <option value="emergency-fund" data-i18n="emergencyFund">Emergency Fund</option>
+                        <option value="retirement" data-i18n="retirement">Retirement Savings</option>
+                        <option value="investments" data-i18n="investments">Investments & Stocks</option>
+                        <option value="savings-goal" data-i18n="savingsGoal">Savings Goal</option>
                     </optgroup>
                     
                     <!-- Vehicle & Home -->
-                    <optgroup label="🚗 Vehicle & Home">
-                        <option value="car-maintenance">Car Maintenance & Repairs</option>
-                        <option value="home-maintenance">Home Maintenance & Repairs</option>
-                        <option value="furniture">Furniture & Appliances</option>
-                        <option value="renovation">Home Renovation</option>
-                        <option value="parking">Parking & Tolls</option>
+                    <optgroup label="🚗 Vehicle & Home" data-i18n="vehicleHome">
+                        <option value="car-maintenance" data-i18n="carMaintenance">Car Maintenance & Repairs</option>
+                        <option value="home-maintenance" data-i18n="homeMaintenance">Home Maintenance & Repairs</option>
+                        <option value="furniture" data-i18n="furniture">Furniture & Appliances</option>
+                        <option value="renovation" data-i18n="renovation">Home Renovation</option>
+                        <option value="parking" data-i18n="parking">Parking & Tolls</option>
                     </optgroup>
                     
                     <!-- Other -->
-                    <optgroup label="📦 Other">
-                        <option value="other">Other Expenses</option>
-                        <option value="fees">Bank Fees & Charges</option>
-                        <option value="work-expenses">Work Expenses</option>
+                    <optgroup label="📦 Other" data-i18n="other">
+                        <option value="other" data-i18n="otherExpenses">Other Expenses</option>
+                        <option value="fees" data-i18n="fees">Bank Fees & Charges</option>
+                        <option value="work-expenses" data-i18n="workExpenses">Work Expenses</option>
                     </optgroup>
                 </select>
             </div>
-            <button type="submit">Add Transaction</button>
+            <button type="submit" data-i18n="addTransaction">Add Transaction</button>
         </form>
 
         <div class="transactions-section">
-            <h3>Transaction History</h3>
+            <h3 data-i18n="transactionHistory">Transaction History</h3>
             <div id="transactions-list" class="transactions-list">
-                <!-- Transactions will be dynamically inserted here -->
+                <div class="empty-state" data-i18n="noTransactions">
+                    No transactions yet. Add your first transaction above!
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Language translations
+        const translations = {
+            en: {
+                appTitle: "💰 Budget Tracker",
+                totalIncome: "Total Income",
+                totalExpenses: "Total Expenses",
+                balance: "Balance",
+                allTime: "All Time",
+                thisMonth: "This Month",
+                thisYear: "This Year",
+                allCategories: "All Categories",
+                exportCSV: "Export CSV",
+                exportJSON: "Export JSON",
+                clearData: "Clear Data",
+                expensesByCategory: "Expenses by Category",
+                monthlyOverview: "Monthly Overview",
+                addTransaction: "Add Transaction",
+                description: "Description",
+                amount: "Amount",
+                selectType: "Select Type",
+                income: "Income",
+                expense: "Expense",
+                selectCategory: "Select Category",
+                incomeCategories: "Income",
+                salary: "Salary/Wages",
+                freelance: "Freelance Work",
+                bonus: "Bonus & Commissions",
+                investment: "Investment Income",
+                rental: "Rental Income",
+                gift: "Gifts & Inheritance",
+                refund: "Refunds & Rebates",
+                sideBusiness: "Side Business",
+                essentialExpenses: "Essential Expenses",
+                rent: "Rent/Mortgage",
+                utilities: "Utilities",
+                internet: "Internet & Phone",
+                groceries: "Groceries",
+                transportation: "Transportation",
+                insurance: "Insurance",
+                medical: "Medical & Healthcare",
+                debt: "Debt Payments",
+                lifestyleEntertainment: "Lifestyle & Entertainment",
+                dining: "Dining Out",
+                entertainment: "Entertainment",
+                shopping: "Shopping",
+                subscriptions: "Subscriptions",
+                hobbies: "Hobbies & Leisure",
+                fitness: "Fitness & Sports",
+                holidaysTravel: "Holidays & Travel",
+                flights: "Flights & Transportation",
+                accommodation: "Accommodation",
+                mealsTravel: "Meals & Dining (Travel)",
+                activities: "Activities & Tours",
+                souvenirs: "Souvenirs & Shopping",
+                travelInsurance: "Travel Insurance",
+                vacationFund: "Vacation Savings",
+                familyEducation: "Family & Education",
+                childcare: "Childcare & Education",
+                pets: "Pets & Pet Care",
+                giftsDonations: "Gifts & Donations",
+                familyActivities: "Family Activities",
+                education: "Education & Courses",
+                books: "Books & Learning",
+                savingsInvestments: "Savings & Investments",
+                emergencyFund: "Emergency Fund",
+                retirement: "Retirement Savings",
+                investments: "Investments & Stocks",
+                savingsGoal: "Savings Goal",
+                vehicleHome: "Vehicle & Home",
+                carMaintenance: "Car Maintenance",
+                homeMaintenance: "Home Maintenance",
+                furniture: "Furniture & Appliances",
+                renovation: "Home Renovation",
+                parking: "Parking & Tolls",
+                other: "Other",
+                otherExpenses: "Other Expenses",
+                fees: "Bank Fees & Charges",
+                workExpenses: "Work Expenses",
+                transactionHistory: "Transaction History",
+                noTransactions: "No transactions yet. Add your first transaction above!"
+            },
+            es: {
+                appTitle: "💰 Seguimiento de Presupuesto",
+                totalIncome: "Ingresos Totales",
+                totalExpenses: "Gastos Totales",
+                balance: "Balance",
+                allTime: "Todo el Tiempo",
+                thisMonth: "Este Mes",
+                thisYear: "Este Año",
+                allCategories: "Todas las Categorías",
+                exportCSV: "Exportar CSV",
+                exportJSON: "Exportar JSON",
+                clearData: "Borrar Datos",
+                expensesByCategory: "Gastos por Categoría",
+                monthlyOverview: "Resumen Mensual",
+                addTransaction: "Agregar Transacción",
+                description: "Descripción",
+                amount: "Monto",
+                selectType: "Seleccionar Tipo",
+                income: "Ingreso",
+                expense: "Gasto",
+                selectCategory: "Seleccionar Categoría",
+                incomeCategories: "Ingresos",
+                salary: "Salario/Sueldo",
+                freelance: "Trabajo Independiente",
+                bonus: "Bonus & Comisiones",
+                investment: "Ingresos por Inversión",
+                rental: "Ingresos por Alquiler",
+                gift: "Regalos & Herencia",
+                refund: "Reembolsos",
+                sideBusiness: "Negocio Secundario",
+                essentialExpenses: "Gastos Esenciales",
+                rent: "Alquiler/Hipoteca",
+                utilities: "Servicios",
+                internet: "Internet & Teléfono",
+                groceries: "Comestibles",
+                transportation: "Transporte",
+                insurance: "Seguro",
+                medical: "Medicina & Salud",
+                debt: "Pagos de Deuda",
+                lifestyleEntertainment: "Estilo de Vida & Entretenimiento",
+                dining: "Comer Fuera",
+                entertainment: "Entretenimiento",
+                shopping: "Compras",
+                subscriptions: "Suscripciones",
+                hobbies: "Pasatiempos & Ocio",
+                fitness: "Fitness & Deportes",
+                holidaysTravel: "Vacaciones & Viajes",
+                flights: "Vuelos & Transporte",
+                accommodation: "Alojamiento",
+                mealsTravel: "Comidas (Viaje)",
+                activities: "Actividades & Tours",
+                souvenirs: "Recuerdos & Compras",
+                travelInsurance: "Seguro de Viaje",
+                vacationFund: "Ahorros para Vacaciones",
+                familyEducation: "Familia & Educación",
+                childcare: "Cuidado Infantil & Educación",
+                pets: "Mascotas & Cuidado",
+                giftsDonations: "Regalos & Donaciones",
+                familyActivities: "Actividades Familiares",
+                education: "Educación & Cursos",
+                books: "Libros & Aprendizaje",
+                savingsInvestments: "Ahorros & Inversiones",
+                emergencyFund: "Fondo de Emergencia",
+                retirement: "Ahorros para Jubilación",
+                investments: "Inversiones & Acciones",
+                savingsGoal: "Meta de Ahorros",
+                vehicleHome: "Vehículo & Hogar",
+                carMaintenance: "Mantenimiento del Coche",
+                homeMaintenance: "Mantenimiento del Hogar",
+                furniture: "Muebles & Electrodomésticos",
+                renovation: "Renovación del Hogar",
+                parking: "Estacionamiento & Peajes",
+                other: "Otro",
+                otherExpenses: "Otros Gastos",
+                fees: "Tarifas Bancarias",
+                workExpenses: "Gastos de Trabajo",
+                transactionHistory: "Historial de Transacciones",
+                noTransactions: "No hay transacciones aún. ¡Agrega tu primera transacción arriba!"
+            },
+            fr: {
+                appTitle: "💰 Suivi de Budget",
+                totalIncome: "Revenu Total",
+                totalExpenses: "Dépenses Totales",
+                balance: "Solde",
+                allTime: "Tout le Temps",
+                thisMonth: "Ce Mois",
+                thisYear: "Cette Année",
+                allCategories: "Toutes les Catégories",
+                exportCSV: "Exporter CSV",
+                exportJSON: "Exporter JSON",
+                clearData: "Effacer les Données",
+                expensesByCategory: "Dépenses par Catégorie",
+                monthlyOverview: "Aperçu Mensuel",
+                addTransaction: "Ajouter une Transaction",
+                description: "Description",
+                amount: "Montant",
+                selectType: "Sélectionner le Type",
+                income: "Revenu",
+                expense: "Dépense",
+                selectCategory: "Sélectionner la Catégorie",
+                incomeCategories: "Revenus",
+                salary: "Salaire/Traitement",
+                freelance: "Travail Indépendant",
+                bonus: "Bonus & Commissions",
+                investment: "Revenus de Placement",
+                rental: "Revenus Locatifs",
+                gift: "Cadeaux & Héritage",
+                refund: "Remboursements",
+                sideBusiness: "Entreprise Secondaire",
+                essentialExpenses: "Dépenses Essentielles",
+                rent: "Loyer/Hypothèque",
+                utilities: "Services Publics",
+                internet: "Internet & Téléphone",
+                groceries: "Épicerie",
+                transportation: "Transport",
+                insurance: "Assurance",
+                medical: "Médical & Santé",
+                debt: "Paiements de Dette",
+                lifestyleEntertainment: "Style de Vie & Divertissement",
+                dining: "Restaurant",
+                entertainment: "Divertissement",
+                shopping: "Shopping",
+                subscriptions: "Abonnements",
+                hobbies: "Loisirs & Divertissement",
+                fitness: "Fitness & Sports",
+                holidaysTravel: "Vacances & Voyages",
+                flights: "Vols & Transport",
+                accommodation: "Hébergement",
+                mealsTravel: "Repas (Voyage)",
+                activities: "Activités & Visites",
+                souvenirs: "Souvenirs & Shopping",
+                travelInsurance: "Assurance Voyage",
+                vacationFund: "Économies de Vacances",
+                familyEducation: "Famille & Éducation",
+                childcare: "Garde d'Enfants & Éducation",
+                pets: "Animaux & Soins",
+                giftsDonations: "Cadeaux & Dons",
+                familyActivities: "Activités Familiales",
+                education: "Éducation & Cours",
+                books: "Livres & Apprentissage",
+                savingsInvestments: "Économies & Investissements",
+                emergencyFund: "Fonds d'Urgence",
+                retirement: "Économies de Retraite",
+                investments: "Investissements & Actions",
+                savingsGoal: "Objectif d'Épargne",
+                vehicleHome: "Véhicule & Maison",
+                carMaintenance: "Entretien de la Voiture",
+                homeMaintenance: "Entretien de la Maison",
+                furniture: "Meubles & Électroménagers",
+                renovation: "Rénovation de la Maison",
+                parking: "Stationnement & Péages",
+                other: "Autre",
+                otherExpenses: "Autres Dépenses",
+                fees: "Frais Bancaires",
+                workExpenses: "Frais de Travail",
+                transactionHistory: "Historique des Transactions",
+                noTransactions: "Aucune transaction pour le moment. Ajoutez votre première transaction ci-dessus!"
+            },
+            de: {
+                appTitle: "💰 Budget Tracker",
+                totalIncome: "Gesamteinnahmen",
+                totalExpenses: "Gesamtausgaben",
+                balance: "Saldo",
+                allTime: "Gesamter Zeitraum",
+                thisMonth: "Diesen Monat",
+                thisYear: "Dieses Jahr",
+                allCategories: "Alle Kategorien",
+                exportCSV: "CSV exportieren",
+                exportJSON: "JSON exportieren",
+                clearData: "Daten löschen",
+                expensesByCategory: "Ausgaben nach Kategorie",
+                monthlyOverview: "Monatliche Übersicht",
+                addTransaction: "Transaktion hinzufügen",
+                description: "Beschreibung",
+                amount: "Betrag",
+                selectType: "Typ auswählen",
+                income: "Einnahme",
+                expense: "Ausgabe",
+                selectCategory: "Kategorie auswählen",
+                incomeCategories: "Einnahmen",
+                salary: "Gehalt/Lohn",
+                freelance: "Freiberufliche Arbeit",
+                bonus: "Bonus & Provisionen",
+                investment: "Investment-Einnahmen",
+                rental: "Mieteinnahmen",
+                gift: "Geschenke & Erbschaft",
+                refund: "Rückerstattungen",
+                sideBusiness: "Nebengeschäft",
+                essentialExpenses: "Essenzielle Ausgaben",
+                rent: "Miete/Hypothek",
+                utilities: "Versorgungsleistungen",
+                internet: "Internet & Telefon",
+                groceries: "Lebensmittel",
+                transportation: "Transport",
+                insurance: "Versicherung",
+                medical: "Medizin & Gesundheit",
+                debt: "Schuldenzahlungen",
+                lifestyleEntertainment: "Lifestyle & Unterhaltung",
+                dining: "Essen gehen",
+                entertainment: "Unterhaltung",
+                shopping: "Einkaufen",
+                subscriptions: "Abonnements",
+                hobbies: "Hobbys & Freizeit",
+                fitness: "Fitness & Sport",
+                holidaysTravel: "Urlaub & Reisen",
+                flights: "Flüge & Transport",
+                accommodation: "Unterkunft",
+                mealsTravel: "Mahlzeiten (Reise)",
+                activities: "Aktivitäten & Touren",
+                souvenirs: "Souvenirs & Einkaufen",
+                travelInsurance: "Reiseversicherung",
+                vacationFund: "Urlaubssparen",
+                familyEducation: "Familie & Bildung",
+                childcare: "Kinderbetreuung & Bildung",
+                pets: "Haustiere & Pflege",
+                giftsDonations: "Geschenke & Spenden",
+                familyActivities: "Familienaktivitäten",
+                education: "Bildung & Kurse",
+                books: "Bücher & Lernen",
+                savingsInvestments: "Sparen & Investieren",
+                emergencyFund: "Notfallfonds",
+                retirement: "Altersvorsorge",
+                investments: "Investitionen & Aktien",
+                savingsGoal: "Sparziel",
+                vehicleHome: "Fahrzeug & Zuhause",
+                carMaintenance: "Autowartung",
+                homeMaintenance: "Hauswartung",
+                furniture: "Möbel & Geräte",
+                renovation: "Hausrenovierung",
+                parking: "Parken & Maut",
+                other: "Andere",
+                otherExpenses: "Andere Ausgaben",
+                fees: "Bankgebühren",
+                workExpenses: "Arbeitskosten",
+                transactionHistory: "Transaktionsverlauf",
+                noTransactions: "Noch keine Transaktionen. Fügen Sie Ihre erste Transaktion oben hinzu!"
+            },
+            zh: {
+                appTitle: "💰 预算跟踪器",
+                totalIncome: "总收入",
+                totalExpenses: "总支出",
+                balance: "余额",
+                allTime: "全部时间",
+                thisMonth: "本月",
+                thisYear: "今年",
+                allCategories: "所有类别",
+                exportCSV: "导出CSV",
+                exportJSON: "导出JSON",
+                clearData: "清除数据",
+                expensesByCategory: "按类别支出",
+                monthlyOverview: "月度概览",
+                addTransaction: "添加交易",
+                description: "描述",
+                amount: "金额",
+                selectType: "选择类型",
+                income: "收入",
+                expense: "支出",
+                selectCategory: "选择类别",
+                incomeCategories: "收入",
+                salary: "工资/薪水",
+                freelance: "自由职业",
+                bonus: "奖金 & 佣金",
+                investment: "投资收入",
+                rental: "租金收入",
+                gift: "礼物 & 遗产",
+                refund: "退款",
+                sideBusiness: "副业",
+                essentialExpenses: "必要支出",
+                rent: "房租/房贷",
+                utilities: "水电费",
+                internet: "网络 & 电话",
+                groceries: "食品杂货",
+                transportation: "交通",
+                insurance: "保险",
+                medical: "医疗 & 保健",
+                debt: "债务支付",
+                lifestyleEntertainment: "生活方式 & 娱乐",
+                dining: "外出就餐",
+                entertainment: "娱乐",
+                shopping: "购物",
+                subscriptions: "订阅",
+                hobbies: "爱好 & 休闲",
+                fitness: "健身 & 运动",
+                holidaysTravel: "假期 & 旅行",
+                flights: "航班 & 交通",
+                accommodation: "住宿",
+                mealsTravel: "餐饮（旅行）",
+                activities: "活动 & 旅游",
+                souvenirs: "纪念品 & 购物",
+                travelInsurance: "旅行保险",
+                vacationFund: "度假储蓄",
+                familyEducation: "家庭 & 教育",
+                childcare: "育儿 & 教育",
+                pets: "宠物 & 护理",
+                giftsDonations: "礼物 & 捐赠",
+                familyActivities: "家庭活动",
+                education: "教育 & 课程",
+                books: "书籍 & 学习",
+                savingsInvestments: "储蓄 & 投资",
+                emergencyFund: "应急基金",
+                retirement: "退休储蓄",
+                investments: "投资 & 股票",
+                savingsGoal: "储蓄目标",
+                vehicleHome: "车辆 & 家居",
+                carMaintenance: "汽车保养",
+                homeMaintenance: "家居维护",
+                furniture: "家具 & 电器",
+                renovation: "家居装修",
+                parking: "停车 & 过路费",
+                other: "其他",
+                otherExpenses: "其他支出",
+                fees: "银行费用",
+                workExpenses: "工作支出",
+                transactionHistory: "交易历史",
+                noTransactions: "还没有交易。在上面添加您的第一笔交易！"
+            }
+        };
+
         class BudgetTracker {
             constructor() {
                 this.transactions = JSON.parse(localStorage.getItem('budgetTransactions')) || [];
@@ -569,6 +970,7 @@
                     timeRange: 'all',
                     category: 'all'
                 };
+                this.currentLanguage = 'en';
                 this.initializeElements();
                 this.attachEventListeners();
                 this.updateUI();
@@ -623,20 +1025,40 @@
             }
 
             changeLanguage(lang) {
+                this.currentLanguage = lang;
+                
                 // Update active language button
                 this.languageBtns.forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.lang === lang);
                 });
                 
-                // Show language change notification
-                const languageNames = {
-                    'en': 'English',
-                    'es': 'Spanish',
-                    'fr': 'French', 
-                    'de': 'German',
-                    'zh': 'Chinese'
-                };
-                alert(`Language changed to ${languageNames[lang] || 'Unknown'}`);
+                // Update all text elements with translations
+                this.updateTranslations();
+            }
+
+            updateTranslations() {
+                // Update all elements with data-i18n attribute
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[this.currentLanguage] && translations[this.currentLanguage][key]) {
+                        element.textContent = translations[this.currentLanguage][key];
+                    }
+                });
+
+                // Update all placeholders
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (translations[this.currentLanguage] && translations[this.currentLanguage][key]) {
+                        element.placeholder = translations[this.currentLanguage][key];
+                    }
+                });
+
+                // Update chart labels
+                if (this.barChart) {
+                    this.barChart.data.datasets[0].label = translations[this.currentLanguage].income;
+                    this.barChart.data.datasets[1].label = translations[this.currentLanguage].expense;
+                    this.barChart.update();
+                }
             }
 
             addTransaction() {
@@ -813,14 +1235,14 @@
                         labels: [],
                         datasets: [
                             {
-                                label: 'Income',
+                                label: translations[this.currentLanguage].income,
                                 data: [],
                                 backgroundColor: '#27ae60',
                                 borderColor: '#219a52',
                                 borderWidth: 1
                             },
                             {
-                                label: 'Expenses',
+                                label: translations[this.currentLanguage].expense,
                                 data: [],
                                 backgroundColor: '#e74c3c',
                                 borderColor: '#c0392b',
@@ -881,7 +1303,7 @@
                 const categories = [...new Set(this.transactions.map(t => t.category))];
                 
                 // Clear existing options except "All Categories"
-                this.categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+                this.categoryFilter.innerHTML = '<option value="all">' + translations[this.currentLanguage].allCategories + '</option>';
                 
                 // Add each category as an option
                 categories.forEach(category => {
@@ -912,7 +1334,7 @@
                 if (transactions.length === 0) {
                     this.transactionsList.innerHTML = `
                         <div class="empty-state">
-                            No transactions found. ${this.transactions.length === 0 ? 'Add your first transaction above!' : 'Try changing your filters.'}
+                            ${translations[this.currentLanguage].noTransactions}
                         </div>
                     `;
                     return;
