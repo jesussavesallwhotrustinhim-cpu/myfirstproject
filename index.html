@@ -56,6 +56,7 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 15px;
         }
 
         .language-btn {
@@ -69,6 +70,74 @@
         }
 
         .language-btn:hover, .language-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .currency-section {
+            margin-bottom: 20px;
+        }
+
+        .currency-search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto 15px;
+        }
+
+        .currency-search {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .currency-search::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .currency-search:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .currency-search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .currency-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-height: 120px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .currency-tab {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .currency-tab:hover, .currency-tab.active {
             background: rgba(255, 255, 255, 0.3);
         }
 
@@ -134,6 +203,7 @@
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .chart-card h3 {
@@ -145,6 +215,40 @@
 
         .chart-card canvas {
             max-height: 300px;
+        }
+
+        .chart-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .toggle-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .toggle-btn:not(.active) {
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: #d5dbdb;
         }
 
         .controls-panel {
@@ -463,22 +567,54 @@
             text-transform: uppercase;
         }
 
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .payment-method i {
+            font-size: 14px;
+        }
+
+        .payment-cash {
+            color: #27ae60;
+        }
+
+        .payment-card {
+            color: #3498db;
+        }
+
+        .currency-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
         /* Scrollbar styling */
-        .transactions-list::-webkit-scrollbar {
+        .transactions-list::-webkit-scrollbar,
+        .currency-tabs::-webkit-scrollbar {
             width: 6px;
         }
 
-        .transactions-list::-webkit-scrollbar-track {
+        .transactions-list::-webkit-scrollbar-track,
+        .currency-tabs::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 3px;
         }
 
-        .transactions-list::-webkit-scrollbar-thumb {
+        .transactions-list::-webkit-scrollbar-thumb,
+        .currency-tabs::-webkit-scrollbar-thumb {
             background: #bdc3c7;
             border-radius: 3px;
         }
 
-        .transactions-list::-webkit-scrollbar-thumb:hover {
+        .transactions-list::-webkit-scrollbar-thumb:hover,
+        .currency-tabs::-webkit-scrollbar-thumb:hover {
             background: #95a5a6;
         }
 
@@ -529,6 +665,12 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
+
+            .chart-toggle {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -545,6 +687,15 @@
                 <button class="language-btn" data-lang="fr">Français</button>
                 <button class="language-btn" data-lang="de">Deutsch</button>
                 <button class="language-btn" data-lang="zh">中文</button>
+            </div>
+            <div class="currency-section">
+                <div class="currency-search-container">
+                    <input type="text" class="currency-search" placeholder="Search currencies..." id="currency-search">
+                    <i class="fas fa-search currency-search-icon"></i>
+                </div>
+                <div class="currency-tabs" id="currency-tabs">
+                    <!-- Currency tabs will be populated by JavaScript -->
+                </div>
             </div>
         </header>
 
@@ -572,12 +723,12 @@
                 <p id="balance">$0.00</p>
                 <div class="quick-stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="avg-income">$0</div>
-                        <div class="stat-label" data-i18n="avgIncome">Avg Income</div>
+                        <div class="stat-value" id="monthly-salary">$0</div>
+                        <div class="stat-label" data-i18n="monthlySalary">Monthly Salary</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="avg-expense">$0</div>
-                        <div class="stat-label" data-i18n="avgExpense">Avg Expense</div>
+                        <div class="stat-value" id="remaining-budget">$0</div>
+                        <div class="stat-label" data-i18n="remainingBudget">Remaining Budget</div>
                     </div>
                 </div>
             </div>
@@ -593,11 +744,13 @@
                 <select class="filter-select" id="category-filter">
                     <option value="all" data-i18n="allCategories">All Categories</option>
                 </select>
-                <select class="filter-select" id="sort-by">
-                    <option value="date-desc" data-i18n="newestFirst">Newest First</option>
-                    <option value="date-asc" data-i18n="oldestFirst">Oldest First</option>
-                    <option value="amount-desc" data-i18n="highestAmount">Highest Amount</option>
-                    <option value="amount-asc" data-i18n="lowestAmount">Lowest Amount</option>
+                <select class="filter-select" id="payment-filter">
+                    <option value="all" data-i18n="allPayments">All Payments</option>
+                    <option value="cash" data-i18n="cash">Cash</option>
+                    <option value="card" data-i18n="creditCard">Credit Card</option>
+                </select>
+                <select class="filter-select" id="currency-filter">
+                    <option value="all" data-i18n="allCurrencies">All Currencies</option>
                 </select>
             </div>
             <div class="export-buttons">
@@ -607,8 +760,8 @@
                 <button class="btn btn-secondary" id="export-json" data-i18n="exportJSON">
                     <i class="fas fa-file-code"></i> Export JSON
                 </button>
-                <button class="btn btn-success" id="import-data" data-i18n="importData">
-                    <i class="fas fa-file-import"></i> Import Data
+                <button class="btn btn-success" id="set-salary" data-i18n="setSalary">
+                    <i class="fas fa-money-bill-wave"></i> Set Salary
                 </button>
                 <button class="btn btn-danger" id="clear-data" data-i18n="clearData">
                     <i class="fas fa-trash"></i> Clear Data
@@ -618,7 +771,15 @@
 
         <div class="charts-container">
             <div class="chart-card">
-                <h3 data-i18n="expensesByCategory">Expenses by Category</h3>
+                <h3 id="pie-chart-title" data-i18n="expensesByCategory">Expenses by Category</h3>
+                <div class="chart-toggle">
+                    <button class="toggle-btn active" id="expense-toggle">
+                        <i class="fas fa-chart-pie"></i> Expenses
+                    </button>
+                    <button class="toggle-btn" id="income-toggle">
+                        <i class="fas fa-chart-pie"></i> Income
+                    </button>
+                </div>
                 <canvas id="pie-chart"></canvas>
             </div>
             <div class="chart-card">
@@ -652,12 +813,99 @@
                     <label for="category" data-i18n="category">Category</label>
                     <select id="category" required>
                         <option value="" data-i18n="selectCategory">Select Category</option>
-                        <!-- Categories would be the same as in the original code -->
+                        <!-- Income Categories -->
+                        <optgroup label="💰 Income" data-i18n="incomeCategories">
+                            <option value="salary" data-i18n="salary">Salary/Wages</option>
+                            <option value="freelance" data-i18n="freelance">Freelance Work</option>
+                            <option value="bonus" data-i18n="bonus">Bonus & Commissions</option>
+                            <option value="investment" data-i18n="investment">Investment Income</option>
+                            <option value="rental" data-i18n="rental">Rental Income</option>
+                            <option value="gift" data-i18n="gift">Gifts & Inheritance</option>
+                            <option value="refund" data-i18n="refund">Refunds & Rebates</option>
+                            <option value="side-business" data-i18n="sideBusiness">Side Business</option>
+                        </optgroup>
+                        
+                        <!-- Essential Expenses -->
+                        <optgroup label="🏠 Essential Expenses" data-i18n="essentialExpenses">
+                            <option value="rent" data-i18n="rent">Rent/Mortgage</option>
+                            <option value="utilities" data-i18n="utilities">Utilities (Electric, Water, Gas)</option>
+                            <option value="internet" data-i18n="internet">Internet & Phone</option>
+                            <option value="groceries" data-i18n="groceries">Groceries</option>
+                            <option value="transportation" data-i18n="transportation">Transportation & Fuel</option>
+                            <option value="insurance" data-i18n="insurance">Insurance (Health, Car, Home)</option>
+                            <option value="medical" data-i18n="medical">Medical & Healthcare</option>
+                            <option value="debt" data-i18n="debt">Debt Payments</option>
+                        </optgroup>
+                        
+                        <!-- Lifestyle & Entertainment -->
+                        <optgroup label="🎯 Lifestyle & Entertainment" data-i18n="lifestyleEntertainment">
+                            <option value="dining" data-i18n="dining">Dining Out & Takeout</option>
+                            <option value="entertainment" data-i18n="entertainment">Entertainment & Streaming</option>
+                            <option value="shopping" data-i18n="shopping">Shopping & Personal Care</option>
+                            <option value="subscriptions" data-i18n="subscriptions">Subscriptions (Apps, Memberships)</option>
+                            <option value="hobbies" data-i18n="hobbies">Hobbies & Leisure</option>
+                            <option value="fitness" data-i18n="fitness">Fitness & Sports</option>
+                        </optgroup>
+                        
+                        <!-- Holidays & Travel -->
+                        <optgroup label="✈️ Holidays & Travel" data-i18n="holidaysTravel">
+                            <option value="flights" data-i18n="flights">Flights & Transportation</option>
+                            <option value="accommodation" data-i18n="accommodation">Accommodation</option>
+                            <option value="meals-travel" data-i18n="mealsTravel">Meals & Dining (Travel)</option>
+                            <option value="activities" data-i18n="activities">Activities & Tours</option>
+                            <option value="souvenirs" data-i18n="souvenirs">Souvenirs & Shopping</option>
+                            <option value="travel-insurance" data-i18n="travelInsurance">Travel Insurance</option>
+                            <option value="vacation-fund" data-i18n="vacationFund">Vacation Savings</option>
+                        </optgroup>
+                        
+                        <!-- Family & Education -->
+                        <optgroup label="👨‍👩‍👧‍👦 Family & Education" data-i18n="familyEducation">
+                            <option value="childcare" data-i18n="childcare">Childcare & Education</option>
+                            <option value="pets" data-i18n="pets">Pets & Pet Care</option>
+                            <option value="gifts-donations" data-i18n="giftsDonations">Gifts & Donations</option>
+                            <option value="family-activities" data-i18n="familyActivities">Family Activities</option>
+                            <option value="education" data-i18n="education">Education & Courses</option>
+                            <option value="books" data-i18n="books">Books & Learning</option>
+                        </optgroup>
+                        
+                        <!-- Savings & Investments -->
+                        <optgroup label="📈 Savings & Investments" data-i18n="savingsInvestments">
+                            <option value="emergency-fund" data-i18n="emergencyFund">Emergency Fund</option>
+                            <option value="retirement" data-i18n="retirement">Retirement Savings</option>
+                            <option value="investments" data-i18n="investments">Investments & Stocks</option>
+                            <option value="savings-goal" data-i18n="savingsGoal">Savings Goal</option>
+                        </optgroup>
+                        
+                        <!-- Vehicle & Home -->
+                        <optgroup label="🚗 Vehicle & Home" data-i18n="vehicleHome">
+                            <option value="car-maintenance" data-i18n="carMaintenance">Car Maintenance & Repairs</option>
+                            <option value="home-maintenance" data-i18n="homeMaintenance">Home Maintenance & Repairs</option>
+                            <option value="furniture" data-i18n="furniture">Furniture & Appliances</option>
+                            <option value="renovation" data-i18n="renovation">Home Renovation</option>
+                            <option value="parking" data-i18n="parking">Parking & Tolls</option>
+                        </optgroup>
+                        
+                        <!-- Other -->
+                        <optgroup label="📦 Other" data-i18n="other">
+                            <option value="other" data-i18n="otherExpenses">Other Expenses</option>
+                            <option value="fees" data-i18n="fees">Bank Fees & Charges</option>
+                            <option value="work-expenses" data-i18n="workExpenses">Work Expenses</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="date" data-i18n="date">Date</label>
-                    <input type="date" id="date" required>
+                    <label for="payment-method" data-i18n="paymentMethod">Payment Method</label>
+                    <select id="payment-method" required>
+                        <option value="" data-i18n="selectPayment">Select Payment</option>
+                        <option value="cash" data-i18n="cash">Cash</option>
+                        <option value="card" data-i18n="creditCard">Credit Card</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="currency" data-i18n="currency">Currency</label>
+                    <select id="currency" required>
+                        <!-- Currency options will be populated by JavaScript -->
+                    </select>
                 </div>
             </div>
             <button type="submit" data-i18n="addTransaction">
@@ -678,23 +926,534 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        // Enhanced Budget Tracker with additional features
+        // Comprehensive currency data with exchange rates
+        const currencies = [
+            { code: 'USD', name: 'US Dollar', symbol: '$', rate: 1 },
+            { code: 'EUR', name: 'Euro', symbol: '€', rate: 0.92 },
+            { code: 'GBP', name: 'British Pound', symbol: '£', rate: 0.79 },
+            { code: 'JPY', name: 'Japanese Yen', symbol: '¥', rate: 151.50 },
+            { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$', rate: 1.36 },
+            { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', rate: 1.52 },
+            { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF', rate: 0.90 },
+            { code: 'CNY', name: 'Chinese Yuan', symbol: '¥', rate: 7.23 },
+            { code: 'INR', name: 'Indian Rupee', symbol: '₹', rate: 83.30 },
+            { code: 'MXN', name: 'Mexican Peso', symbol: '$', rate: 16.75 },
+            { code: 'BRL', name: 'Brazilian Real', symbol: 'R$', rate: 5.05 },
+            { code: 'RUB', name: 'Russian Ruble', symbol: '₽', rate: 92.50 },
+            { code: 'KRW', name: 'South Korean Won', symbol: '₩', rate: 1350.00 },
+            { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$', rate: 1.35 },
+            { code: 'NZD', name: 'New Zealand Dollar', symbol: 'NZ$', rate: 1.67 },
+            { code: 'SEK', name: 'Swedish Krona', symbol: 'kr', rate: 10.68 },
+            { code: 'NOK', name: 'Norwegian Krone', symbol: 'kr', rate: 10.75 },
+            { code: 'DKK', name: 'Danish Krone', symbol: 'kr', rate: 6.88 },
+            { code: 'TRY', name: 'Turkish Lira', symbol: '₺', rate: 32.05 },
+            { code: 'ZAR', name: 'South African Rand', symbol: 'R', rate: 18.92 },
+            { code: 'HKD', name: 'Hong Kong Dollar', symbol: 'HK$', rate: 7.82 },
+            { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ', rate: 3.67 },
+            { code: 'SAR', name: 'Saudi Riyal', symbol: '﷼', rate: 3.75 },
+            { code: 'THB', name: 'Thai Baht', symbol: '฿', rate: 36.55 },
+            { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM', rate: 4.74 },
+            { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'Rp', rate: 15850.00 },
+            { code: 'PHP', name: 'Philippine Peso', symbol: '₱', rate: 56.50 },
+            { code: 'PLN', name: 'Polish Zloty', symbol: 'zł', rate: 4.02 },
+            { code: 'CZK', name: 'Czech Koruna', symbol: 'Kč', rate: 23.45 },
+            { code: 'HUF', name: 'Hungarian Forint', symbol: 'Ft', rate: 360.80 }
+        ];
+
+        // Language translations
+        const translations = {
+            en: {
+                appTitle: "💰 Budget Tracker",
+                appDescription: "Track your income and expenses, visualize your spending, and take control of your finances.",
+                totalIncome: "Total Income",
+                totalExpenses: "Total Expenses",
+                balance: "Balance",
+                monthlySalary: "Monthly Salary",
+                remainingBudget: "Remaining Budget",
+                allTime: "All Time",
+                thisMonth: "This Month",
+                thisYear: "This Year",
+                allCategories: "All Categories",
+                allPayments: "All Payments",
+                allCurrencies: "All Currencies",
+                cash: "Cash",
+                creditCard: "Credit Card",
+                currency: "Currency",
+                exportCSV: "Export CSV",
+                exportJSON: "Export JSON",
+                setSalary: "Set Salary",
+                clearData: "Clear Data",
+                expensesByCategory: "Expenses by Category",
+                incomeByCategory: "Income by Category",
+                monthlyOverview: "Monthly Overview",
+                addTransaction: "Add Transaction",
+                description: "Description",
+                amount: "Amount",
+                type: "Type",
+                category: "Category",
+                paymentMethod: "Payment Method",
+                selectType: "Select Type",
+                income: "Income",
+                expense: "Expense",
+                selectCategory: "Select Category",
+                selectPayment: "Select Payment",
+                incomeCategories: "Income",
+                salary: "Salary/Wages",
+                freelance: "Freelance Work",
+                bonus: "Bonus & Commissions",
+                investment: "Investment Income",
+                rental: "Rental Income",
+                gift: "Gifts & Inheritance",
+                refund: "Refunds & Rebates",
+                sideBusiness: "Side Business",
+                essentialExpenses: "Essential Expenses",
+                rent: "Rent/Mortgage",
+                utilities: "Utilities",
+                internet: "Internet & Phone",
+                groceries: "Groceries",
+                transportation: "Transportation",
+                insurance: "Insurance",
+                medical: "Medical & Healthcare",
+                debt: "Debt Payments",
+                lifestyleEntertainment: "Lifestyle & Entertainment",
+                dining: "Dining Out",
+                entertainment: "Entertainment",
+                shopping: "Shopping",
+                subscriptions: "Subscriptions",
+                hobbies: "Hobbies & Leisure",
+                fitness: "Fitness & Sports",
+                holidaysTravel: "Holidays & Travel",
+                flights: "Flights & Transportation",
+                accommodation: "Accommodation",
+                mealsTravel: "Meals & Dining (Travel)",
+                activities: "Activities & Tours",
+                souvenirs: "Souvenirs & Shopping",
+                travelInsurance: "Travel Insurance",
+                vacationFund: "Vacation Savings",
+                familyEducation: "Family & Education",
+                childcare: "Childcare & Education",
+                pets: "Pets & Pet Care",
+                giftsDonations: "Gifts & Donations",
+                familyActivities: "Family Activities",
+                education: "Education & Courses",
+                books: "Books & Learning",
+                savingsInvestments: "Savings & Investments",
+                emergencyFund: "Emergency Fund",
+                retirement: "Retirement Savings",
+                investments: "Investments & Stocks",
+                savingsGoal: "Savings Goal",
+                vehicleHome: "Vehicle & Home",
+                carMaintenance: "Car Maintenance",
+                homeMaintenance: "Home Maintenance",
+                furniture: "Furniture & Appliances",
+                renovation: "Home Renovation",
+                parking: "Parking & Tolls",
+                other: "Other",
+                otherExpenses: "Other Expenses",
+                fees: "Bank Fees & Charges",
+                workExpenses: "Work Expenses",
+                transactionHistory: "Transaction History",
+                noTransactions: "No transactions yet. Add your first transaction above!"
+            },
+            es: {
+                appTitle: "💰 Seguimiento de Presupuesto",
+                appDescription: "Realiza un seguimiento de tus ingresos y gastos, visualiza tus gastos y toma el control de tus finanzas.",
+                totalIncome: "Ingresos Totales",
+                totalExpenses: "Gastos Totales",
+                balance: "Balance",
+                monthlySalary: "Salario Mensual",
+                remainingBudget: "Presupuesto Restante",
+                allTime: "Todo el Tiempo",
+                thisMonth: "Este Mes",
+                thisYear: "Este Año",
+                allCategories: "Todas las Categorías",
+                allPayments: "Todos los Pagos",
+                allCurrencies: "Todas las Monedas",
+                cash: "Efectivo",
+                creditCard: "Tarjeta de Crédito",
+                currency: "Moneda",
+                exportCSV: "Exportar CSV",
+                exportJSON: "Exportar JSON",
+                setSalary: "Establecer Salario",
+                clearData: "Borrar Datos",
+                expensesByCategory: "Gastos por Categoría",
+                incomeByCategory: "Ingresos por Categoría",
+                monthlyOverview: "Resumen Mensual",
+                addTransaction: "Agregar Transacción",
+                description: "Descripción",
+                amount: "Monto",
+                type: "Tipo",
+                category: "Categoría",
+                paymentMethod: "Método de Pago",
+                selectType: "Seleccionar Tipo",
+                income: "Ingreso",
+                expense: "Gasto",
+                selectCategory: "Seleccionar Categoría",
+                selectPayment: "Seleccionar Pago",
+                incomeCategories: "Ingresos",
+                salary: "Salario/Sueldo",
+                freelance: "Trabajo Independiente",
+                bonus: "Bonus & Comisiones",
+                investment: "Ingresos por Inversión",
+                rental: "Ingresos por Alquiler",
+                gift: "Regalos & Herencia",
+                refund: "Reembolsos",
+                sideBusiness: "Negocio Secundario",
+                essentialExpenses: "Gastos Esenciales",
+                rent: "Alquiler/Hipoteca",
+                utilities: "Servicios",
+                internet: "Internet & Teléfono",
+                groceries: "Comestibles",
+                transportation: "Transporte",
+                insurance: "Seguro",
+                medical: "Medicina & Salud",
+                debt: "Pagos de Deuda",
+                lifestyleEntertainment: "Estilo de Vida & Entretenimiento",
+                dining: "Comer Fuera",
+                entertainment: "Entretenimiento",
+                shopping: "Compras",
+                subscriptions: "Suscripciones",
+                hobbies: "Pasatiempos & Ocio",
+                fitness: "Fitness & Deportes",
+                holidaysTravel: "Vacaciones & Viajes",
+                flights: "Vuelos & Transporte",
+                accommodation: "Alojamiento",
+                mealsTravel: "Comidas (Viaje)",
+                activities: "Actividades & Tours",
+                souvenirs: "Recuerdos & Compras",
+                travelInsurance: "Seguro de Viaje",
+                vacationFund: "Ahorros para Vacaciones",
+                familyEducation: "Familia & Educación",
+                childcare: "Cuidado Infantil & Educación",
+                pets: "Mascotas & Cuidado",
+                giftsDonations: "Regalos & Donaciones",
+                familyActivities: "Actividades Familiares",
+                education: "Educación & Cursos",
+                books: "Libros & Aprendizaje",
+                savingsInvestments: "Ahorros & Inversiones",
+                emergencyFund: "Fondo de Emergencia",
+                retirement: "Ahorros para Jubilación",
+                investments: "Inversiones & Acciones",
+                savingsGoal: "Meta de Ahorros",
+                vehicleHome: "Vehículo & Hogar",
+                carMaintenance: "Mantenimiento del Coche",
+                homeMaintenance: "Mantenimiento del Hogar",
+                furniture: "Muebles & Electrodomésticos",
+                renovation: "Renovación del Hogar",
+                parking: "Estacionamiento & Peajes",
+                other: "Otro",
+                otherExpenses: "Otros Gastos",
+                fees: "Tarifas Bancarias",
+                workExpenses: "Gastos de Trabajo",
+                transactionHistory: "Historial de Transacciones",
+                noTransactions: "No hay transacciones aún. ¡Agrega tu primera transacción arriba!"
+            },
+            fr: {
+                appTitle: "💰 Suivi de Budget",
+                appDescription: "Suivez vos revenus et dépenses, visualisez vos dépenses et prenez le contrôle de vos finances.",
+                totalIncome: "Revenu Total",
+                totalExpenses: "Dépenses Totales",
+                balance: "Solde",
+                monthlySalary: "Salaire Mensuel",
+                remainingBudget: "Budget Restant",
+                allTime: "Tout le Temps",
+                thisMonth: "Ce Mois",
+                thisYear: "Cette Année",
+                allCategories: "Toutes les Catégories",
+                allPayments: "Tous les Paiements",
+                allCurrencies: "Toutes les Devises",
+                cash: "Espèces",
+                creditCard: "Carte de Crédit",
+                currency: "Devise",
+                exportCSV: "Exporter CSV",
+                exportJSON: "Exporter JSON",
+                setSalary: "Définir le Salaire",
+                clearData: "Effacer les Données",
+                expensesByCategory: "Dépenses par Catégorie",
+                incomeByCategory: "Revenus par Catégorie",
+                monthlyOverview: "Aperçu Mensuel",
+                addTransaction: "Ajouter une Transaction",
+                description: "Description",
+                amount: "Montant",
+                type: "Type",
+                category: "Catégorie",
+                paymentMethod: "Méthode de Paiement",
+                selectType: "Sélectionner le Type",
+                income: "Revenu",
+                expense: "Dépense",
+                selectCategory: "Sélectionner la Catégorie",
+                selectPayment: "Sélectionner le Paiement",
+                incomeCategories: "Revenus",
+                salary: "Salaire/Traitement",
+                freelance: "Travail Indépendant",
+                bonus: "Bonus & Commissions",
+                investment: "Revenus de Placement",
+                rental: "Revenus Locatifs",
+                gift: "Cadeaux & Héritage",
+                refund: "Remboursements",
+                sideBusiness: "Entreprise Secondaire",
+                essentialExpenses: "Dépenses Essentielles",
+                rent: "Loyer/Hypothèque",
+                utilities: "Services Publics",
+                internet: "Internet & Téléphone",
+                groceries: "Épicerie",
+                transportation: "Transport",
+                insurance: "Assurance",
+                medical: "Médical & Santé",
+                debt: "Paiements de Dette",
+                lifestyleEntertainment: "Style de Vie & Divertissement",
+                dining: "Restaurant",
+                entertainment: "Divertissement",
+                shopping: "Shopping",
+                subscriptions: "Abonnements",
+                hobbies: "Loisirs & Divertissement",
+                fitness: "Fitness & Sports",
+                holidaysTravel: "Vacances & Voyages",
+                flights: "Vols & Transport",
+                accommodation: "Hébergement",
+                mealsTravel: "Repas (Voyage)",
+                activities: "Activités & Visites",
+                souvenirs: "Souvenirs & Shopping",
+                travelInsurance: "Assurance Voyage",
+                vacationFund: "Économies de Vacances",
+                familyEducation: "Famille & Éducation",
+                childcare: "Garde d'Enfants & Éducation",
+                pets: "Animaux & Soins",
+                giftsDonations: "Cadeaux & Dons",
+                familyActivities: "Activités Familiales",
+                education: "Éducation & Cours",
+                books: "Livres & Apprentissage",
+                savingsInvestments: "Économies & Investissements",
+                emergencyFund: "Fonds d'Urgence",
+                retirement: "Économies de Retraite",
+                investments: "Investissements & Actions",
+                savingsGoal: "Objectif d'Épargne",
+                vehicleHome: "Véhicule & Maison",
+                carMaintenance: "Entretien de la Voiture",
+                homeMaintenance: "Entretien de la Maison",
+                furniture: "Meubles & Électroménagers",
+                renovation: "Rénovation de la Maison",
+                parking: "Stationnement & Péages",
+                other: "Autre",
+                otherExpenses: "Autres Dépenses",
+                fees: "Frais Bancaires",
+                workExpenses: "Frais de Travail",
+                transactionHistory: "Historique des Transactions",
+                noTransactions: "Aucune transaction pour le moment. Ajoutez votre première transaction ci-dessus!"
+            },
+            de: {
+                appTitle: "💰 Budget Tracker",
+                appDescription: "Verfolgen Sie Ihre Einnahmen und Ausgaben, visualisieren Sie Ihre Ausgaben und übernehmen Sie die Kontrolle über Ihre Finanzen.",
+                totalIncome: "Gesamteinnahmen",
+                totalExpenses: "Gesamtausgaben",
+                balance: "Saldo",
+                monthlySalary: "Monatsgehalt",
+                remainingBudget: "Verbleibendes Budget",
+                allTime: "Gesamter Zeitraum",
+                thisMonth: "Diesen Monat",
+                thisYear: "Dieses Jahr",
+                allCategories: "Alle Kategorien",
+                allPayments: "Alle Zahlungen",
+                allCurrencies: "Alle Währungen",
+                cash: "Bargeld",
+                creditCard: "Kreditkarte",
+                currency: "Währung",
+                exportCSV: "CSV exportieren",
+                exportJSON: "JSON exportieren",
+                setSalary: "Gehalt festlegen",
+                clearData: "Daten löschen",
+                expensesByCategory: "Ausgaben nach Kategorie",
+                incomeByCategory: "Einnahmen nach Kategorie",
+                monthlyOverview: "Monatliche Übersicht",
+                addTransaction: "Transaktion hinzufügen",
+                description: "Beschreibung",
+                amount: "Betrag",
+                type: "Typ",
+                category: "Kategorie",
+                paymentMethod: "Zahlungsmethode",
+                selectType: "Typ auswählen",
+                income: "Einnahme",
+                expense: "Ausgabe",
+                selectCategory: "Kategorie auswählen",
+                selectPayment: "Zahlung auswählen",
+                incomeCategories: "Einnahmen",
+                salary: "Gehalt/Lohn",
+                freelance: "Freiberufliche Arbeit",
+                bonus: "Bonus & Provisionen",
+                investment: "Investment-Einnahmen",
+                rental: "Mieteinnahmen",
+                gift: "Geschenke & Erbschaft",
+                refund: "Rückerstattungen",
+                sideBusiness: "Nebengeschäft",
+                essentialExpenses: "Essenzielle Ausgaben",
+                rent: "Miete/Hypothek",
+                utilities: "Versorgungsleistungen",
+                internet: "Internet & Telefon",
+                groceries: "Lebensmittel",
+                transportation: "Transport",
+                insurance: "Versicherung",
+                medical: "Medizin & Gesundheit",
+                debt: "Schuldenzahlungen",
+                lifestyleEntertainment: "Lifestyle & Unterhaltung",
+                dining: "Essen gehen",
+                entertainment: "Unterhaltung",
+                shopping: "Einkaufen",
+                subscriptions: "Abonnements",
+                hobbies: "Hobbys & Freizeit",
+                fitness: "Fitness & Sport",
+                holidaysTravel: "Urlaub & Reisen",
+                flights: "Flüge & Transport",
+                accommodation: "Unterkunft",
+                mealsTravel: "Mahlzeiten (Reise)",
+                activities: "Aktivitäten & Touren",
+                souvenirs: "Souvenirs & Einkaufen",
+                travelInsurance: "Reiseversicherung",
+                vacationFund: "Urlaubssparen",
+                familyEducation: "Familie & Bildung",
+                childcare: "Kinderbetreuung & Bildung",
+                pets: "Haustiere & Pflege",
+                giftsDonations: "Geschenke & Spenden",
+                familyActivities: "Familienaktivitäten",
+                education: "Bildung & Kurse",
+                books: "Bücher & Lernen",
+                savingsInvestments: "Sparen & Investieren",
+                emergencyFund: "Notfallfonds",
+                retirement: "Altersvorsorge",
+                investments: "Investitionen & Aktien",
+                savingsGoal: "Sparziel",
+                vehicleHome: "Fahrzeug & Zuhause",
+                carMaintenance: "Autowartung",
+                homeMaintenance: "Hauswartung",
+                furniture: "Möbel & Geräte",
+                renovation: "Hausrenovierung",
+                parking: "Parken & Maut",
+                other: "Andere",
+                otherExpenses: "Andere Ausgaben",
+                fees: "Bankgebühren",
+                workExpenses: "Arbeitskosten",
+                transactionHistory: "Transaktionsverlauf",
+                noTransactions: "Noch keine Transaktionen. Fügen Sie Ihre erste Transaktion oben hinzu!"
+            },
+            zh: {
+                appTitle: "💰 预算跟踪器",
+                appDescription: "跟踪您的收入和支出，可视化您的支出，并掌控您的财务。",
+                totalIncome: "总收入",
+                totalExpenses: "总支出",
+                balance: "余额",
+                monthlySalary: "月薪",
+                remainingBudget: "剩余预算",
+                allTime: "全部时间",
+                thisMonth: "本月",
+                thisYear: "今年",
+                allCategories: "所有类别",
+                allPayments: "所有支付方式",
+                allCurrencies: "所有货币",
+                cash: "现金",
+                creditCard: "信用卡",
+                currency: "货币",
+                exportCSV: "导出CSV",
+                exportJSON: "导出JSON",
+                setSalary: "设置工资",
+                clearData: "清除数据",
+                expensesByCategory: "按类别支出",
+                incomeByCategory: "按类别收入",
+                monthlyOverview: "月度概览",
+                addTransaction: "添加交易",
+                description: "描述",
+                amount: "金额",
+                type: "类型",
+                category: "类别",
+                paymentMethod: "支付方式",
+                selectType: "选择类型",
+                income: "收入",
+                expense: "支出",
+                selectCategory: "选择类别",
+                selectPayment: "选择支付方式",
+                incomeCategories: "收入",
+                salary: "工资/薪水",
+                freelance: "自由职业",
+                bonus: "奖金 & 佣金",
+                investment: "投资收入",
+                rental: "租金收入",
+                gift: "礼物 & 遗产",
+                refund: "退款",
+                sideBusiness: "副业",
+                essentialExpenses: "必要支出",
+                rent: "房租/房贷",
+                utilities: "水电费",
+                internet: "网络 & 电话",
+                groceries: "食品杂货",
+                transportation: "交通",
+                insurance: "保险",
+                medical: "医疗 & 保健",
+                debt: "债务支付",
+                lifestyleEntertainment: "生活方式 & 娱乐",
+                dining: "外出就餐",
+                entertainment: "娱乐",
+                shopping: "购物",
+                subscriptions: "订阅",
+                hobbies: "爱好 & 休闲",
+                fitness: "健身 & 运动",
+                holidaysTravel: "假期 & 旅行",
+                flights: "航班 & 交通",
+                accommodation: "住宿",
+                mealsTravel: "餐饮（旅行）",
+                activities: "活动 & 旅游",
+                souvenirs: "纪念品 & 购物",
+                travelInsurance: "旅行保险",
+                vacationFund: "度假储蓄",
+                familyEducation: "家庭 & 教育",
+                childcare: "育儿 & 教育",
+                pets: "宠物 & 护理",
+                giftsDonations: "礼物 & 捐赠",
+                familyActivities: "家庭活动",
+                education: "教育 & 课程",
+                books: "书籍 & 学习",
+                savingsInvestments: "储蓄 & 投资",
+                emergencyFund: "应急基金",
+                retirement: "退休储蓄",
+                investments: "投资 & 股票",
+                savingsGoal: "储蓄目标",
+                vehicleHome: "车辆 & 家居",
+                carMaintenance: "汽车保养",
+                homeMaintenance: "家居维护",
+                furniture: "家具 & 电器",
+                renovation: "家居装修",
+                parking: "停车 & 过路费",
+                other: "其他",
+                otherExpenses: "其他支出",
+                fees: "银行费用",
+                workExpenses: "工作支出",
+                transactionHistory: "交易历史",
+                noTransactions: "还没有交易。在上面添加您的第一笔交易！"
+            }
+        };
+
+        // Enhanced Budget Tracker with Income & Expense Pie Charts
         class BudgetTracker {
             constructor() {
                 this.transactions = JSON.parse(localStorage.getItem('budgetTransactions')) || [];
+                this.monthlySalary = parseFloat(localStorage.getItem('monthlySalary')) || 0;
+                this.lastSalaryMonth = parseInt(localStorage.getItem('lastSalaryMonth')) || -1;
                 this.pieChart = null;
                 this.barChart = null;
                 this.filters = {
                     timeRange: 'all',
                     category: 'all',
-                    sortBy: 'date-desc'
+                    paymentMethod: 'all',
+                    currency: 'all'
                 };
                 this.currentLanguage = 'en';
+                this.currentCurrency = 'USD';
+                this.pieChartType = 'expense'; // 'expense' or 'income'
                 this.initializeElements();
                 this.attachEventListeners();
+                this.populateCurrencyOptions();
                 this.updateUI();
                 this.initializeCharts();
                 this.updateCategoryFilter();
+                this.updateCurrencyFilter();
+                this.checkAndAddMonthlySalary();
                 this.showNotification('Welcome to Budget Tracker!', 'info');
             }
 
@@ -704,27 +1463,52 @@
                 this.amountInput = document.getElementById('amount');
                 this.typeInput = document.getElementById('type');
                 this.categoryInput = document.getElementById('category');
-                this.dateInput = document.getElementById('date');
+                this.paymentMethodInput = document.getElementById('payment-method');
+                this.currencyInput = document.getElementById('currency');
                 this.transactionsList = document.getElementById('transactions-list');
                 this.totalIncomeElement = document.getElementById('total-income');
                 this.totalExpensesElement = document.getElementById('total-expenses');
                 this.balanceElement = document.getElementById('balance');
+                this.monthlySalaryElement = document.getElementById('monthly-salary');
+                this.remainingBudgetElement = document.getElementById('remaining-budget');
                 this.incomeProgress = document.getElementById('income-progress');
                 this.expenseProgress = document.getElementById('expense-progress');
-                this.avgIncomeElement = document.getElementById('avg-income');
-                this.avgExpenseElement = document.getElementById('avg-expense');
                 this.timeRangeFilter = document.getElementById('time-range');
                 this.categoryFilter = document.getElementById('category-filter');
-                this.sortByFilter = document.getElementById('sort-by');
+                this.paymentFilter = document.getElementById('payment-filter');
+                this.currencyFilter = document.getElementById('currency-filter');
                 this.exportCsvBtn = document.getElementById('export-csv');
                 this.exportJsonBtn = document.getElementById('export-json');
-                this.importDataBtn = document.getElementById('import-data');
+                this.setSalaryBtn = document.getElementById('set-salary');
                 this.clearDataBtn = document.getElementById('clear-data');
                 this.languageBtns = document.querySelectorAll('.language-btn');
+                this.currencyTabs = document.getElementById('currency-tabs');
+                this.currencySearch = document.getElementById('currency-search');
+                this.expenseToggle = document.getElementById('expense-toggle');
+                this.incomeToggle = document.getElementById('income-toggle');
+                this.pieChartTitle = document.getElementById('pie-chart-title');
                 this.notification = document.getElementById('notification');
-                
-                // Set default date to today
-                this.dateInput.valueAsDate = new Date();
+            }
+
+            populateCurrencyOptions() {
+                // Populate currency tabs
+                this.currencyTabs.innerHTML = '';
+                currencies.forEach(currency => {
+                    const tab = document.createElement('button');
+                    tab.className = `currency-tab ${currency.code === this.currentCurrency ? 'active' : ''}`;
+                    tab.dataset.currency = currency.code;
+                    tab.innerHTML = `<span>${currency.symbol}</span> ${currency.code}`;
+                    this.currencyTabs.appendChild(tab);
+                });
+
+                // Populate currency dropdown
+                this.currencyInput.innerHTML = '';
+                currencies.forEach(currency => {
+                    const option = document.createElement('option');
+                    option.value = currency.code;
+                    option.textContent = `${currency.code} - ${currency.name}`;
+                    this.currencyInput.appendChild(option);
+                });
             }
 
             attachEventListeners() {
@@ -743,14 +1527,19 @@
                     this.updateUI();
                 });
 
-                this.sortByFilter.addEventListener('change', (e) => {
-                    this.filters.sortBy = e.target.value;
+                this.paymentFilter.addEventListener('change', (e) => {
+                    this.filters.paymentMethod = e.target.value;
+                    this.updateUI();
+                });
+
+                this.currencyFilter.addEventListener('change', (e) => {
+                    this.filters.currency = e.target.value;
                     this.updateUI();
                 });
 
                 this.exportCsvBtn.addEventListener('click', () => this.exportToCSV());
                 this.exportJsonBtn.addEventListener('click', () => this.exportToJSON());
-                this.importDataBtn.addEventListener('click', () => this.importData());
+                this.setSalaryBtn.addEventListener('click', () => this.setMonthlySalary());
                 this.clearDataBtn.addEventListener('click', () => this.clearAllData());
 
                 this.languageBtns.forEach(btn => {
@@ -758,6 +1547,63 @@
                         const lang = e.target.dataset.lang;
                         this.changeLanguage(lang);
                     });
+                });
+
+                // Currency tab click event
+                this.currencyTabs.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('currency-tab')) {
+                        const currency = e.target.dataset.currency;
+                        this.changeCurrency(currency);
+                    }
+                });
+
+                // Currency search functionality
+                this.currencySearch.addEventListener('input', (e) => {
+                    this.filterCurrencies(e.target.value);
+                });
+
+                // Pie chart toggle buttons
+                this.expenseToggle.addEventListener('click', () => {
+                    this.switchPieChart('expense');
+                });
+
+                this.incomeToggle.addEventListener('click', () => {
+                    this.switchPieChart('income');
+                });
+            }
+
+            switchPieChart(type) {
+                this.pieChartType = type;
+                
+                // Update active toggle button
+                if (type === 'expense') {
+                    this.expenseToggle.classList.add('active');
+                    this.incomeToggle.classList.remove('active');
+                    this.pieChartTitle.textContent = translations[this.currentLanguage].expensesByCategory;
+                } else {
+                    this.expenseToggle.classList.remove('active');
+                    this.incomeToggle.classList.add('active');
+                    this.pieChartTitle.textContent = translations[this.currentLanguage].incomeByCategory;
+                }
+                
+                // Update the pie chart
+                this.updatePieChart();
+            }
+
+            filterCurrencies(searchTerm) {
+                const tabs = this.currencyTabs.querySelectorAll('.currency-tab');
+                const searchLower = searchTerm.toLowerCase();
+                
+                tabs.forEach(tab => {
+                    const currencyCode = tab.dataset.currency.toLowerCase();
+                    const currency = currencies.find(c => c.code === tab.dataset.currency);
+                    const currencyName = currency ? currency.name.toLowerCase() : '';
+                    
+                    if (currencyCode.includes(searchLower) || currencyName.includes(searchLower)) {
+                        tab.style.display = 'flex';
+                    } else {
+                        tab.style.display = 'none';
+                    }
                 });
             }
 
@@ -771,6 +1617,19 @@
                 
                 // Update all text elements with translations
                 this.updateTranslations();
+            }
+
+            changeCurrency(currency) {
+                this.currentCurrency = currency;
+                
+                // Update active currency tab
+                const tabs = this.currencyTabs.querySelectorAll('.currency-tab');
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.currency === currency);
+                });
+                
+                // Update UI with new currency
+                this.updateUI();
             }
 
             updateTranslations() {
@@ -796,6 +1655,52 @@
                     this.barChart.data.datasets[1].label = translations[this.currentLanguage].expense;
                     this.barChart.update();
                 }
+
+                // Update pie chart title
+                if (this.pieChartType === 'expense') {
+                    this.pieChartTitle.textContent = translations[this.currentLanguage].expensesByCategory;
+                } else {
+                    this.pieChartTitle.textContent = translations[this.currentLanguage].incomeByCategory;
+                }
+            }
+
+            checkAndAddMonthlySalary() {
+                const currentMonth = new Date().getMonth();
+                
+                // If we haven't added salary for this month and monthly salary is set
+                if (this.lastSalaryMonth !== currentMonth && this.monthlySalary > 0) {
+                    // Check if we already have a salary transaction for this month
+                    const currentYear = new Date().getFullYear();
+                    const hasSalaryThisMonth = this.transactions.some(transaction => {
+                        const transactionDate = new Date(transaction.date);
+                        return transaction.type === 'income' && 
+                               transaction.category === 'salary' &&
+                               transactionDate.getMonth() === currentMonth &&
+                               transactionDate.getFullYear() === currentYear;
+                    });
+                    
+                    if (!hasSalaryThisMonth) {
+                        // Add monthly salary transaction
+                        const salaryTransaction = {
+                            id: Date.now().toString(),
+                            description: 'Monthly Salary',
+                            amount: this.monthlySalary,
+                            type: 'income',
+                            category: 'salary',
+                            paymentMethod: 'cash',
+                            currency: this.currentCurrency,
+                            date: new Date().toISOString()
+                        };
+                        
+                        this.transactions.push(salaryTransaction);
+                        this.lastSalaryMonth = currentMonth;
+                        localStorage.setItem('lastSalaryMonth', this.lastSalaryMonth.toString());
+                        this.saveToLocalStorage();
+                        this.updateUI();
+                        this.updateCharts();
+                        this.showNotification('Monthly salary added automatically!', 'success');
+                    }
+                }
             }
 
             addTransaction() {
@@ -803,9 +1708,10 @@
                 const amount = parseFloat(this.amountInput.value);
                 const type = this.typeInput.value;
                 const category = this.categoryInput.value;
-                const date = this.dateInput.value;
+                const paymentMethod = this.paymentMethodInput.value;
+                const currency = this.currencyInput.value;
 
-                if (!description || isNaN(amount) || amount <= 0 || !type || !category || !date) {
+                if (!description || isNaN(amount) || amount <= 0 || !type || !category || !paymentMethod || !currency) {
                     this.showNotification('Please fill in all fields correctly.', 'error');
                     return;
                 }
@@ -816,7 +1722,9 @@
                     amount,
                     type,
                     category,
-                    date: new Date(date).toISOString()
+                    paymentMethod,
+                    currency,
+                    date: new Date().toISOString() // Automatic date
                 };
 
                 this.transactions.push(transaction);
@@ -824,8 +1732,8 @@
                 this.updateUI();
                 this.updateCharts();
                 this.updateCategoryFilter();
+                this.updateCurrencyFilter();
                 this.transactionForm.reset();
-                this.dateInput.valueAsDate = new Date();
                 
                 this.showNotification(
                     `${type === 'income' ? 'Income' : 'Expense'} added successfully!`, 
@@ -840,7 +1748,23 @@
                     this.updateUI();
                     this.updateCharts();
                     this.updateCategoryFilter();
+                    this.updateCurrencyFilter();
                     this.showNotification('Transaction deleted successfully!', 'info');
+                }
+            }
+
+            setMonthlySalary() {
+                const salary = prompt('Enter your monthly salary:', this.monthlySalary || '');
+                if (salary !== null) {
+                    const parsedSalary = parseFloat(salary);
+                    if (!isNaN(parsedSalary) && parsedSalary >= 0) {
+                        this.monthlySalary = parsedSalary;
+                        localStorage.setItem('monthlySalary', this.monthlySalary.toString());
+                        this.updateUI();
+                        this.showNotification('Monthly salary updated successfully!', 'success');
+                    } else {
+                        this.showNotification('Please enter a valid salary amount.', 'error');
+                    }
                 }
             }
 
@@ -869,55 +1793,97 @@
                     filtered = filtered.filter(transaction => transaction.category === this.filters.category);
                 }
 
+                // Filter by payment method
+                if (this.filters.paymentMethod !== 'all') {
+                    filtered = filtered.filter(transaction => transaction.paymentMethod === this.filters.paymentMethod);
+                }
+
+                // Filter by currency
+                if (this.filters.currency !== 'all') {
+                    filtered = filtered.filter(transaction => transaction.currency === this.filters.currency);
+                }
+
                 return filtered;
             }
 
-            sortTransactions(transactions) {
-                const sorted = [...transactions];
+            convertCurrency(amount, fromCurrency, toCurrency) {
+                if (fromCurrency === toCurrency) return amount;
                 
-                switch (this.filters.sortBy) {
-                    case 'date-desc':
-                        return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
-                    case 'date-asc':
-                        return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
-                    case 'amount-desc':
-                        return sorted.sort((a, b) => b.amount - a.amount);
-                    case 'amount-asc':
-                        return sorted.sort((a, b) => a.amount - b.amount);
-                    default:
-                        return sorted;
-                }
+                const fromCurrencyData = currencies.find(c => c.code === fromCurrency);
+                const toCurrencyData = currencies.find(c => c.code === toCurrency);
+                
+                if (!fromCurrencyData || !toCurrencyData) return amount;
+                
+                // Convert to USD first, then to target currency
+                const amountInUSD = amount / fromCurrencyData.rate;
+                return amountInUSD * toCurrencyData.rate;
             }
 
             calculateTotals() {
                 const filteredTransactions = this.getFilteredTransactions();
                 
-                const income = filteredTransactions
-                    .filter(t => t.type === 'income')
-                    .reduce((sum, t) => sum + t.amount, 0);
+                let income = 0;
+                let expenses = 0;
 
-                const expenses = filteredTransactions
-                    .filter(t => t.type === 'expense')
-                    .reduce((sum, t) => sum + t.amount, 0);
+                filteredTransactions.forEach(transaction => {
+                    const convertedAmount = this.convertCurrency(
+                        transaction.amount, 
+                        transaction.currency, 
+                        this.currentCurrency
+                    );
+                    
+                    if (transaction.type === 'income') {
+                        income += convertedAmount;
+                    } else {
+                        expenses += convertedAmount;
+                    }
+                });
 
                 const balance = income - expenses;
 
                 return { income, expenses, balance };
             }
 
-            calculateAverages() {
-                const incomeTransactions = this.transactions.filter(t => t.type === 'income');
-                const expenseTransactions = this.transactions.filter(t => t.type === 'expense');
+            calculateRemainingBudget() {
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
                 
-                const avgIncome = incomeTransactions.length > 0 
-                    ? incomeTransactions.reduce((sum, t) => sum + t.amount, 0) / incomeTransactions.length 
-                    : 0;
+                let monthlyExpenses = 0;
+
+                this.transactions
+                    .filter(t => t.type === 'expense')
+                    .filter(t => {
+                        const transactionDate = new Date(t.date);
+                        return transactionDate.getMonth() === currentMonth && 
+                               transactionDate.getFullYear() === currentYear;
+                    })
+                    .forEach(transaction => {
+                        const convertedAmount = this.convertCurrency(
+                            transaction.amount, 
+                            transaction.currency, 
+                            this.currentCurrency
+                        );
+                        monthlyExpenses += convertedAmount;
+                    });
+                
+                return this.monthlySalary - monthlyExpenses;
+            }
+
+            getIncomeByCategory() {
+                const income = this.transactions.filter(t => t.type === 'income');
+                const categories = {};
+                
+                income.forEach(inc => {
+                    const convertedAmount = this.convertCurrency(
+                        inc.amount, 
+                        inc.currency, 
+                        this.currentCurrency
+                    );
                     
-                const avgExpense = expenseTransactions.length > 0 
-                    ? expenseTransactions.reduce((sum, t) => sum + t.amount, 0) / expenseTransactions.length 
-                    : 0;
-                    
-                return { avgIncome, avgExpense };
+                    categories[inc.category] = (categories[inc.category] || 0) + convertedAmount;
+                });
+
+                return categories;
             }
 
             getExpenseByCategory() {
@@ -925,7 +1891,13 @@
                 const categories = {};
                 
                 expenses.forEach(expense => {
-                    categories[expense.category] = (categories[expense.category] || 0) + expense.amount;
+                    const convertedAmount = this.convertCurrency(
+                        expense.amount, 
+                        expense.currency, 
+                        this.currentCurrency
+                    );
+                    
+                    categories[expense.category] = (categories[expense.category] || 0) + convertedAmount;
                 });
 
                 return categories;
@@ -947,10 +1919,16 @@
                         };
                     }
                     
+                    const convertedAmount = this.convertCurrency(
+                        transaction.amount, 
+                        transaction.currency, 
+                        this.currentCurrency
+                    );
+                    
                     if (transaction.type === 'income') {
-                        monthlyData[monthYear].income += transaction.amount;
+                        monthlyData[monthYear].income += convertedAmount;
                     } else {
-                        monthlyData[monthYear].expenses += transaction.amount;
+                        monthlyData[monthYear].expenses += convertedAmount;
                     }
                 });
 
@@ -1053,15 +2031,27 @@
                 });
             }
 
-            updateCharts() {
-                // Update Pie Chart (Expenses by Category)
-                const expenseData = this.getExpenseByCategory();
-                const pieLabels = Object.keys(expenseData);
-                const pieData = Object.values(expenseData);
+            updatePieChart() {
+                let data, labels;
+                
+                if (this.pieChartType === 'expense') {
+                    const expenseData = this.getExpenseByCategory();
+                    labels = Object.keys(expenseData);
+                    data = Object.values(expenseData);
+                } else {
+                    const incomeData = this.getIncomeByCategory();
+                    labels = Object.keys(incomeData);
+                    data = Object.values(incomeData);
+                }
 
-                this.pieChart.data.labels = pieLabels;
-                this.pieChart.data.datasets[0].data = pieData;
+                this.pieChart.data.labels = labels;
+                this.pieChart.data.datasets[0].data = data;
                 this.pieChart.update();
+            }
+
+            updateCharts() {
+                // Update Pie Chart based on current type
+                this.updatePieChart();
 
                 // Update Bar Chart (Monthly Overview)
                 const monthlyData = this.getMonthlyData();
@@ -1091,31 +2081,45 @@
                 });
             }
 
+            updateCurrencyFilter() {
+                // Get all unique currencies from transactions
+                const currenciesUsed = [...new Set(this.transactions.map(t => t.currency))];
+                
+                // Clear existing options except "All Currencies"
+                this.currencyFilter.innerHTML = '<option value="all">' + translations[this.currentLanguage].allCurrencies + '</option>';
+                
+                // Add each currency as an option
+                currenciesUsed.forEach(currency => {
+                    const option = document.createElement('option');
+                    option.value = currency;
+                    option.textContent = currency;
+                    this.currencyFilter.appendChild(option);
+                });
+            }
+
             updateUI() {
                 const { income, expenses, balance } = this.calculateTotals();
-                const { avgIncome, avgExpense } = this.calculateAverages();
-                const filteredTransactions = this.getFilteredTransactions();
-                const sortedTransactions = this.sortTransactions(filteredTransactions);
+                const remainingBudget = this.calculateRemainingBudget();
 
                 // Update summary cards
                 this.totalIncomeElement.textContent = this.formatCurrency(income);
                 this.totalExpensesElement.textContent = this.formatCurrency(expenses);
                 this.balanceElement.textContent = this.formatCurrency(balance);
+                this.monthlySalaryElement.textContent = this.formatCurrency(this.monthlySalary);
+                this.remainingBudgetElement.textContent = this.formatCurrency(remainingBudget);
 
                 // Update balance color based on value
                 this.balanceElement.style.color = balance >= 0 ? '#27ae60' : '#e74c3c';
+                this.remainingBudgetElement.style.color = remainingBudget >= 0 ? '#27ae60' : '#e74c3c';
 
                 // Update progress bars
                 const total = income + expenses;
                 this.incomeProgress.style.width = total > 0 ? `${(income / total) * 100}%` : '0%';
                 this.expenseProgress.style.width = total > 0 ? `${(expenses / total) * 100}%` : '0%';
 
-                // Update averages
-                this.avgIncomeElement.textContent = this.formatCurrency(avgIncome);
-                this.avgExpenseElement.textContent = this.formatCurrency(avgExpense);
-
                 // Update transactions list
-                this.renderTransactions(sortedTransactions);
+                const filteredTransactions = this.getFilteredTransactions();
+                this.renderTransactions(filteredTransactions);
             }
 
             renderTransactions(transactions) {
@@ -1128,7 +2132,12 @@
                     return;
                 }
 
-                this.transactionsList.innerHTML = transactions
+                // Sort transactions by date (newest first)
+                const sortedTransactions = [...transactions].sort((a, b) => 
+                    new Date(b.date) - new Date(a.date)
+                );
+
+                this.transactionsList.innerHTML = sortedTransactions
                     .map(transaction => {
                         const date = new Date(transaction.date);
                         const formattedDate = date.toLocaleDateString('en-US', {
@@ -1137,14 +2146,32 @@
                             day: 'numeric'
                         });
                         
+                        const paymentIcon = transaction.paymentMethod === 'cash' 
+                            ? '<i class="fas fa-money-bill-wave payment-cash"></i>' 
+                            : '<i class="fas fa-credit-card payment-card"></i>';
+                        
+                        const convertedAmount = this.convertCurrency(
+                            transaction.amount, 
+                            transaction.currency, 
+                            this.currentCurrency
+                        );
+                        
                         return `
                         <div class="transaction-item ${transaction.type}">
                             <div class="transaction-info">
                                 <div class="transaction-description">${transaction.description}</div>
                                 <div class="transaction-category">${transaction.category} • ${formattedDate}</div>
+                                <div class="payment-method">
+                                    ${paymentIcon} ${transaction.paymentMethod === 'cash' ? 'Cash' : 'Credit Card'}
+                                </div>
+                                <div class="currency-info">
+                                    <i class="fas fa-exchange-alt"></i> 
+                                    ${this.formatCurrency(transaction.amount, transaction.currency)} 
+                                    (${this.formatCurrency(convertedAmount)})
+                                </div>
                             </div>
                             <div class="transaction-amount ${transaction.type}">
-                                ${transaction.type === 'income' ? '+' : '-'}${this.formatCurrency(transaction.amount)}
+                                ${transaction.type === 'income' ? '+' : '-'}${this.formatCurrency(convertedAmount)}
                             </div>
                             <button class="delete-btn" onclick="budgetTracker.deleteTransaction('${transaction.id}')">
                                 <i class="fas fa-trash"></i> Delete
@@ -1154,7 +2181,7 @@
             }
 
             exportToCSV() {
-                const headers = ['Date', 'Description', 'Type', 'Category', 'Amount'];
+                const headers = ['Date', 'Description', 'Type', 'Category', 'Payment Method', 'Currency', 'Amount'];
                 const csvContent = [
                     headers.join(','),
                     ...this.transactions.map(transaction => [
@@ -1162,6 +2189,8 @@
                         `"${transaction.description}"`,
                         transaction.type,
                         transaction.category,
+                        transaction.paymentMethod,
+                        transaction.currency,
                         transaction.amount
                     ].join(','))
                 ].join('\n');
@@ -1174,68 +2203,6 @@
                 const jsonContent = JSON.stringify(this.transactions, null, 2);
                 this.downloadFile(jsonContent, 'budget-data.json', 'application/json');
                 this.showNotification('Data exported to JSON successfully', 'success');
-            }
-
-            importData() {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.json,.csv';
-                
-                input.onchange = e => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        try {
-                            let importedData;
-                            
-                            if (file.name.endsWith('.json')) {
-                                importedData = JSON.parse(event.target.result);
-                            } else if (file.name.endsWith('.csv')) {
-                                importedData = this.parseCSV(event.target.result);
-                            } else {
-                                throw new Error('Unsupported file format');
-                            }
-                            
-                            if (Array.isArray(importedData) {
-                                this.transactions = importedData;
-                                this.saveToLocalStorage();
-                                this.updateUI();
-                                this.updateCharts();
-                                this.updateCategoryFilter();
-                                this.showNotification('Data imported successfully', 'success');
-                            } else {
-                                throw new Error('Invalid data format');
-                            }
-                        } catch (error) {
-                            this.showNotification('Error importing data: ' + error.message, 'error');
-                        }
-                    };
-                    reader.readAsText(file);
-                };
-                
-                input.click();
-            }
-
-            parseCSV(csvText) {
-                const lines = csvText.split('\n');
-                const headers = lines[0].split(',').map(h => h.trim());
-                
-                return lines.slice(1).map(line => {
-                    const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
-                    const transaction = {};
-                    
-                    headers.forEach((header, index) => {
-                        transaction[header.toLowerCase()] = values[index];
-                    });
-                    
-                    // Convert amount to number and date to ISO string
-                    transaction.amount = parseFloat(transaction.amount);
-                    transaction.date = new Date(transaction.date).toISOString();
-                    
-                    return transaction;
-                }).filter(t => t.description); // Filter out empty rows
             }
 
             downloadFile(content, fileName, contentType) {
@@ -1253,10 +2220,15 @@
             clearAllData() {
                 if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
                     this.transactions = [];
+                    this.monthlySalary = 0;
+                    this.lastSalaryMonth = -1;
+                    localStorage.removeItem('monthlySalary');
+                    localStorage.removeItem('lastSalaryMonth');
                     this.saveToLocalStorage();
                     this.updateUI();
                     this.updateCharts();
                     this.updateCategoryFilter();
+                    this.updateCurrencyFilter();
                     this.showNotification('All data has been cleared', 'info');
                 }
             }
@@ -1270,10 +2242,15 @@
                 }, 3000);
             }
 
-            formatCurrency(amount) {
+            formatCurrency(amount, currency = this.currentCurrency) {
+                const currencyData = currencies.find(c => c.code === currency);
+                const symbol = currencyData ? currencyData.symbol : '$';
+                
                 return new Intl.NumberFormat('en-US', {
                     style: 'currency',
-                    currency: 'USD'
+                    currency: currency,
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
                 }).format(amount);
             }
 
